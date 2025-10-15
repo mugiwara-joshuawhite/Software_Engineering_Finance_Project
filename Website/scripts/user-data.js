@@ -37,8 +37,7 @@ class Account
      */
     constructor(userData)
     {
-        if (userData)
-            this.load(userData); 
+        this.load(userData); 
     }
 
     /**
@@ -58,12 +57,10 @@ class Account
             else
                 this.notifications = []; 
         }
-
-        this.save()
     }
 
     /**
-     * Save current user data to session storage
+     * Save current user data to storage
      */
     save()
     {
@@ -71,9 +68,9 @@ class Account
     }
 
     /**
-     * Reload user data from session storage.
+     * Reload user data from storage.
      */
-    reload()
+    loadFromStorage()
     {
         let accountJSON = JSON.parse(sessionStorage.getItem('account'));
         this.load(accountJSON);
@@ -98,7 +95,3 @@ class UserNotification
         this.priority = priority;
     }
 }
-
-// Global account definition
-let account = new Account();
-account.reload(); // always refresh the account to have the current data entering a page

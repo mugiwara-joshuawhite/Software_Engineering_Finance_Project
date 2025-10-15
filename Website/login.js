@@ -17,6 +17,8 @@ function login()
 {
     window.location.href = '/pages/home';
 
+    let account = new Account();
+
     // TODO: actual login logic
 
     const accountJSON = {
@@ -25,6 +27,7 @@ function login()
     }
 
     account.load(accountJSON);
+    account.save();
 }
 
 
