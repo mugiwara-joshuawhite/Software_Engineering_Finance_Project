@@ -33,7 +33,7 @@ class Account
 {
     /**
      * 
-     * @param {string} userData Json formatted userData
+     * @param {Object} userData JSON formatted data parsed as an object
      */
     constructor(userData)
     {
@@ -42,8 +42,8 @@ class Account
     }
 
     /**
-     * Load data from json file
-     * @param {string} userData JSON formatted user data
+     * Load user data into account object
+     * @param {Object} userData JSON formatted data parsed as an object
      */
     load(userData)
     {
@@ -71,7 +71,7 @@ class Account
     }
 
     /**
-     * Reload user data from session storage
+     * Reload user data from session storage.
      */
     reload()
     {
@@ -99,6 +99,6 @@ class UserNotification
     }
 }
 
-// Global account definition to avoid having to re use it over and over
+// Global account definition
 let account = new Account();
 account.reload(); // always refresh the account to have the current data entering a page
