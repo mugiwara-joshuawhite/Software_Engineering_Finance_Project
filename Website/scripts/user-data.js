@@ -51,11 +51,12 @@ class Account
      */
     async saveToStorage()
     {
-        // Open root directory, and get file handle to store data in
+        // Open root directory, and get file handle to write data to
         const root = await navigator.storage.getDirectory();
-        const testFile = await root.getFileHandle("account.json", {create: true});
-        const writableFile = await testFile.createWritable();
+        const accountFile = await root.getFileHandle("account.json", {create: true});
+        const writableFile = await accountFile.createWritable();
 
+        // Write current account data to account file
         await writableFile.write(`${JSON.stringify(this)}`);
         await writableFile.close();
     }
@@ -65,11 +66,12 @@ class Account
      */
     async loadFromStorage()
     {
+        // Open root directory, and get account file to read
         const root = await navigator.storage.getDirectory();
-        const testFile = await root.getFileHandle("account.json");
+        const accountFile = await root.getFileHandle("account.json");
+        const readableFile = await accountFile.getFile();
 
-        // Read the file and load the account
-        const readableFile = await testFile.getFile();
+        // Load account info from file
         const accountJSON = JSON.parse(await readableFile.text());
         this.load(accountJSON);
     }
