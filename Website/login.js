@@ -18,6 +18,7 @@ function login()
     createAccount(); // TODO: delete this when login logic is ready. Account's aren't created here
 
     // TODO: Put actual login logic here,
+    let account = new Account()
 
     // Load user file
 
@@ -30,7 +31,10 @@ function login()
     
 
     // Move user to the home page
-    window.location.href = '/pages/home';
+    account.onSaveSuccess = function ()
+    {
+        window.location.href = '/pages/home';
+    }
 }
 
 
@@ -71,6 +75,13 @@ function createAccount()
 {
     let account = new Account('Test User', '1234');
     account.saveToStorage();
+
+
+    // Wait for account to be saved before moving to home page
+    account.onSaveSuccess = function ()
+    {
+        window.location.href = '/pages/home';
+    }
 }
 
 /**

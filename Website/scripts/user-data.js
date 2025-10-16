@@ -5,6 +5,7 @@
  * @description This script provides consistent definitions for various data types across all pages
  */
 
+
 /**
  * Account class
  */
@@ -61,6 +62,7 @@ class Account
         request.onupgradeneeded = function() 
         {
             const database = request.result; // obtain database
+
             // Define storage pattern. We want to store an account. Accounts are indexed by id
             const store = database.createObjectStore('account', { keyPath: 'id' });
         }
@@ -69,16 +71,20 @@ class Account
         // and store account
         request.onsuccess = function () 
         {
-            const database = request.result; // obtain database
-            // Open account database for reading and writign
+            // Open database holding account information
+            const database = request.result;
             const transaction = database.transaction('account', 'readwrite');
-            // Open a store for the account
             const store = transaction.objectStore('account');
-            // Convert account to JSON string for storage
-            const accountJSON = JSON.parse(JSON.stringify(thisAccount));
+
+            // Convert account to JSON object for storage
+            const accountString = JSON.stringify(thisAccount);
+            const accountJSON = JSON.parse(accountString);
 
             // put current account into storage at index 0
             store.put({ id: 0, account: accountJSON });
+
+            // Do any operations on successful save
+            thisAccount.onSaveSuccess();
         }
     }
 
@@ -90,7 +96,7 @@ class Account
     {
         // Open account database from indexedDB, with version '1'
         const request = indexedDB.open('AccountDatabase', 1);
-        let thisAccount = this;
+        let thisAccount = this; // retain reference to this Account
 
         // If request gives error, indicate error occured
         request.onerror = function() { console.error('IndexedDB error occured'); }
@@ -100,6 +106,7 @@ class Account
         request.onupgradeneeded = function() 
         {
             const database = request.result; // obtain database
+
             // Define storage pattern. We want to store an account. Accounts are indexed by id
             const store = database.createObjectStore('account', { keyPath: 'id' });
         }
@@ -108,14 +115,14 @@ class Account
         // onLoadSuccess
         request.onsuccess = function () 
         {
-            const db = request.result; // obtain database
-            // Open account database for reading and writign
-            const transaction = db.transaction('account', 'readwrite');
-            // Open a store for the account
+            // Open database holding account information
+            const database = request.result;
+            const transaction = database.transaction('account', 'readwrite');
             const store = transaction.objectStore('account');
 
-            const query = store.get(0); // Account hardcoded to id of 0 :)
-            
+            // get the current account from the store at id 0
+            const query = store.get(0); 
+
             // When query succeeds, load the stored account
             // and after loading, perform operation defined as needed
             query.onsuccess = function()
@@ -132,13 +139,28 @@ class Account
     onLoadSuccess()
     {
         console.error(`You forgot to reassign this!
-            Do functions with the loaded account data by reassigning
-            onLoad success like this!
+            Do operations with the loaded account data by reassigning
+            onLoad success like this! Otherwise loading does nothing!
             account.onLoadSuccess = function ()
             {
                 // DO STUFF HERE WITH ACCOUNT
             }
             `);
+    }
+
+    /**
+     * Perform any operations on successful save as defined later
+     * Override this with desired behaviors
+     */
+    onSaveSuccess()
+    {
+        /* If you want to perform any operations on save, then override
+            onSaveSuccess by doing something like:
+            account.onSaveSuccess = function ()
+            {
+                // DO STUFF HERE WITH ACCOUNT
+            }
+        */
     }
 
     /**

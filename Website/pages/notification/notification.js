@@ -59,6 +59,7 @@ function main()
 {
     let account = new Account();
     account.loadFromStorage(); // Load any currently stored data in storage
+    
     account.onLoadSuccess = function ()
     {
         //loadNotifications(account);
