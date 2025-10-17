@@ -9,7 +9,6 @@ async function linkDownloadButton()
 
     // Get link to readable account file and attach it to anchor
     const fileURL = URL.createObjectURL(readableFile);
-    const fileData = await readableFile.text();
     downloadAnchor.href = fileURL;
 }
 
