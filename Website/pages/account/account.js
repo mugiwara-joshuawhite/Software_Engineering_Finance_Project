@@ -7,7 +7,7 @@ async function linkDownloadButton()
     
     // Open file 
     const root = await navigator.storage.getDirectory();
-    const accountFile = await root.getFileHandle("account.json");
+    const accountFile = await root.getFileHandle(ACCOUNT_FILE_NAME);
     const readableFile = await accountFile.getFile();
 
     // Get link to readable account file and attach it to anchor

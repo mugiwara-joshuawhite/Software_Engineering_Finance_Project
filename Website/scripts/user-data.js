@@ -5,6 +5,8 @@
  * @description This script provides consistent definitions for various data types across all pages
  */
 
+// Constant for account file name to avoid hardcoding it
+const ACCOUNT_FILE_NAME = "account.json";
 
 /**
  * Account class
@@ -53,7 +55,7 @@ class Account
     {
         // Open root directory, and get file handle to write data to
         const root = await navigator.storage.getDirectory();
-        const accountFile = await root.getFileHandle("account.json", {create: true});
+        const accountFile = await root.getFileHandle(ACCOUNT_FILE_NAME, {create: true});
         const writableFile = await accountFile.createWritable();
 
         // Write current account data to account file
@@ -68,12 +70,27 @@ class Account
     {
         // Open root directory, and get account file to read
         const root = await navigator.storage.getDirectory();
-        const accountFile = await root.getFileHandle("account.json");
+        const accountFile = await root.getFileHandle(ACCOUNT_FILE_NAME, {create: true});
         const readableFile = await accountFile.getFile();
 
-        // Load account info from file
-        const accountJSON = JSON.parse(await readableFile.text());
-        this.load(accountJSON);
+        const text = await readableFile.text();
+
+        // if there is data to load, load it
+        if (text.length > 0)
+        {
+            // Load account info from file
+            const accountJSON = JSON.parse(await readableFile.text());
+            this.load(accountJSON);
+        }
+    }
+
+    /**
+     * Use this to clear entire storage
+     */
+    async clearStorage()
+    {
+        const root = await navigator.storage.getDirectory();
+        root.remove();
     }
 }
 
