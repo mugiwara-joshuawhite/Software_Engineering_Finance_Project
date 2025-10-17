@@ -50,14 +50,34 @@ async function login()
             window.location.href = '/pages/home';
         }
     }
-    else // Invalid input file, put red border to indicate invalid file
+    else // else load from storage
     {
-        usernameInput.classList.remove('red-border');
-        passwordInput.classList.remove('red-border');
-        errorText.classList.add(`hidden`);
+        await account.loadFromStorage();
+        
+        // Validate user credentials
+        // if name or username is incorrect then give invalid login
+        if (account.name !== username || account.password !== password)
+        {
+            errorText.innerHTML = `Invalid Login, Please Try Again.`;
+            errorText.classList.remove(`hidden`);
 
-        fileInput.classList.add('red-border');
+            usernameInput.classList.add('red-border');
+            passwordInput.classList.add('red-border');
+        }
+        else // Correct login, save account and move to hompage
+        {
+            await account.saveToStorage();
+            window.location.href = '/pages/home';
+        }
     }
+    // else // Invalid input file, put red border to indicate invalid file
+    // {
+    //     usernameInput.classList.remove('red-border');
+    //     passwordInput.classList.remove('red-border');
+    //     errorText.classList.add(`hidden`);
+
+    //     fileInput.classList.add('red-border');
+    // }
 }
 
 /**
