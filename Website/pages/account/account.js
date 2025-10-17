@@ -23,7 +23,7 @@ async function clearStorage()
 {
     let account = new Account();
     await account.clearStorage();
-
+    
     window.location.href = "/";
 }
 

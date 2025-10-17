@@ -94,7 +94,7 @@ class Account
     async clearStorage()
     {
         const root = await navigator.storage.getDirectory();
-        root.remove();
+        root.removeEntry(ACCOUNT_FILE_NAME);
     }
 }
 
