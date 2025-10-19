@@ -24,6 +24,7 @@ class Account
         this.name = name;
         this.password = password;
         this.notifications = []
+        
     }
 
     /**

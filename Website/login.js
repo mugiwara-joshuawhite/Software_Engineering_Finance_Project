@@ -47,7 +47,7 @@ async function login()
         else // Correct login, save account and move to hompage
         {
             await account.saveToStorage();
-            window.location.href = '/pages/home';
+            window.location.href = 'pages/home/index.html',true;
         }
     }
     else // else load from storage
@@ -67,7 +67,7 @@ async function login()
         else // Correct login, save account and move to hompage
         {
             await account.saveToStorage();
-            window.location.href = '/pages/home';
+            window.location.href = 'pages/home/index.html',true;
         }
     }
     // else // Invalid input file, put red border to indicate invalid file
@@ -103,9 +103,7 @@ function validJSONFile(file)
 }
 
 
-/**
- * TODO: input sanitization
- * 
+/** 
  * Create account button is pressed, check if valid username/password
  * was given, create the account and send the user to the home page
  * as a new user
@@ -121,21 +119,39 @@ async function createAccount()
     const password = passwordInput.value;
     const passwordConfirm = passwordConfirmInput.value;
 
-    // If no username is given don't create account
-    if (username.length == 0)
+    // Tests for input of username
+    if (username.length < 5 || username.length > 25)
     {
         errorText.classList.remove('hidden');
-        errorText.innerHTML = `Error: Invalid Username`;
+        
+        if (username.length == 0) {
+            errorText.innerHTML = 'Error: No UserName provided.';
+        }
+        else if (username.length < 5) {
+            errorText.innerHTML = 'Error: UserName too short, must be 5 or more characters.';
+        }
+        else if (username.length > 25) {
+            errorText.innerHTML = 'Error: UserName too long, must be 25 or fewer characters.';
+        }
 
         usernameInput.classList.add('red-border');
         passwordInput.classList.remove('red-border');
         passwordConfirmInput.classList.remove('red-border');
     }
-    // If no password is given don't create account
-    else if (password.length == 0)
-    {
+    // Tests for input of password
+    else if (password.length < 5 || password.length > 25)
+    {   
         errorText.classList.remove('hidden');
-        errorText.innerHTML = `Error: No Password`;
+
+         if (password.length == 0) {
+            errorText.innerHTML = 'Error: No PassWord provided.';
+        }
+        else if (password.length < 5) {
+            errorText.innerHTML = 'Error: PassWord too short, must be 5 or more characters.';
+        }
+        else if (password.length > 25) {
+            errorText.innerHTML = 'Error: PassWord too long, must be 25 or fewer characters.';
+        }
 
         usernameInput.classList.remove('red-border');
         passwordInput.classList.add('red-border');
@@ -157,7 +173,7 @@ async function createAccount()
 
         // Wait for account to be saved before moving to home page
         await account.saveToStorage();
-        window.location.href = '/pages/home';
+        window.location.href = 'pages/home/index.html',true; //https://stackoverflow.com/questions/15759020/window-location-href-doesnt-redirect
     }
 }
 

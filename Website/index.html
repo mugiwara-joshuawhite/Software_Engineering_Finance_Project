@@ -1,3 +1,4 @@
+<!--Preamble-->
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,25 +16,30 @@
         </div>
         
 
+        <!--Covers most of the page-->
         <div class="login-box">
             
             <!-- Text input fields-->
             <form class="login-box">
+
+                <!--Added some attributes for quality-->
                 <label for="username">Username</label>
                 <input class="input" type="text" id="username">
 
+                <!--Changed type to password to hide user password -Josh-->
                 <label for="password">Password</label>
-                <input class="input" type="text" id="password">
+                <input class="input" type="password" id="password">
 
                 <label class="create hidden" for="confirm-password">Confirm Password</label>
-                <input class="input create hidden" type="text" id="confirm-password">
+                <input class="input create hidden" type="password" id="confirm-password">
+
             </form>
 
             <!-- Login account buttons -->
-            <button class="login-button login" id="login">
+            <button type="submit" class="login-button login" id="login">
                 Login
             </button>
-            <button class="login-button login" id="new-account">
+            <button type="submit" class="login-button login" id="new-account">
                 Create New Account
             </button>
 
@@ -58,6 +64,7 @@
         </strong> </p>
         <input type="file" id="user-file" class="file-input login">
 
+        <!--Calls scripts-->
         <script src="scripts/user-data.js"></script>
         <script src="login.js"></script>
     </body>
