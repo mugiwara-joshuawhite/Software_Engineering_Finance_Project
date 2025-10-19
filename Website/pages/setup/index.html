@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Monetally</title>
+
+        <link rel="stylesheet" href="../../styles/default.css">
+        <link rel="stylesheet" href="template.js">
+        <link rel="stylesheet" href="setup.css">
+    </head>
+
+    <body>
+       
+        <div class="nav-bar">
+            <p class="nav-name">
+                Monetally
+            </p>
+
+            <!--Kept the buttons themselves for visual consistency,
+            but removed their functionality while setup is occuring -Josh-->
+            <div class="nav-buttons">
+                <a href="" class="nav-button"> Home </a>
+                <a href="" class="nav-button"> Income  </a>
+                <a href="" class="nav-button"> Expense </a>
+                <a href="" class="nav-button notification-button"> Notifications
+                    <iframe src="../notification/tooltip.html" class="notification-tooltip"></iframe>
+                </a>
+                <a href="" class="nav-button"> Account </a>
+            </div>
+        </div>
+       
+        <hr>
+        <h1 id="welcome">Welcome to Monetally!</h1>
+        <hr>
+        <p>💪 Fill out the following information to get your information set up!</p>
+        <hr>
+
+        <div class="income-stream">
+            <p>Let's start with income streams -</p>
+
+            <div class="dropdown">
+                <button class="button">Add income stream</button>
+            </div>
+        </div>
+
+
+        <script src="../../scripts/user-data.js"></script>
+        <script src="template.js"></script>
+    </body>
+</html>

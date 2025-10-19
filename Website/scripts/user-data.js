@@ -8,6 +8,9 @@
 // Constant for account file name to avoid hardcoding it
 const ACCOUNT_FILE_NAME = "account.json";
 
+//Packages
+const flatpickr = require("flatpickr");
+
 /**
  * Account class
  */
@@ -23,8 +26,9 @@ class Account
     {
         this.name = name;
         this.password = password;
-        this.notifications = []
-        
+        this.notifications = [];
+        this.setup = false; //By default, set setup to false to indicate account has not been setup
+        this.streams = [];  //Array of streams, each element should have two parts - How much they get paid and how often
     }
 
     /**

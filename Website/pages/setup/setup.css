@@ -1,0 +1,6 @@
+#welcome{
+    display:inline-block;
+    width: 50%;
+    border: 5px solid rgba(243, 235, 95, 0.841);
+    font-size: 2em;
+}

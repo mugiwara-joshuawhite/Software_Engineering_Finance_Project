@@ -5,7 +5,6 @@
  * @description this script handles login logic
  */
 
-
 /**
  * login function triggered by login button.
  * if valid login take user to home page
@@ -47,7 +46,7 @@ async function login()
         else // Correct login, save account and move to hompage
         {
             await account.saveToStorage();
-            window.location.href = 'pages/home/index.html',true;
+            window.location.href = 'pages/home/index.html',true; //https://stackoverflow.com/questions/15759020/window-location-href-doesnt-redirect
         }
     }
     else // else load from storage
@@ -67,7 +66,7 @@ async function login()
         else // Correct login, save account and move to hompage
         {
             await account.saveToStorage();
-            window.location.href = 'pages/home/index.html',true;
+            window.location.href = 'pages/home/index.html',true; //https://stackoverflow.com/questions/15759020/window-location-href-doesnt-redirect
         }
     }
     // else // Invalid input file, put red border to indicate invalid file
@@ -119,9 +118,13 @@ async function createAccount()
     const password = passwordInput.value;
     const passwordConfirm = passwordConfirmInput.value;
 
+    //Debugging purposes
+    window.alert("createAccount() function is being reached");
+
     // Tests for input of username
     if (username.length < 5 || username.length > 25)
     {
+
         errorText.classList.remove('hidden');
         
         if (username.length == 0) {
@@ -169,11 +172,26 @@ async function createAccount()
     }
     else // create account of input username and password
     {
+
+        //Debugging purposes
+        window.alert("else reached");   //gets here
+
         let account = new Account(username, password);
 
-        // Wait for account to be saved before moving to home page
+        //Debugging purposes
+        window.alert("account has been made");  //not here
+
+        // Wait for account to be saved before moving to next page
         await account.saveToStorage();
-        window.location.href = 'pages/home/index.html',true; //https://stackoverflow.com/questions/15759020/window-location-href-doesnt-redirect
+
+
+        //I promise, this isn't the problem code, I've checked.
+        if (account.setup == false) {
+            window.location.href = 'pages/setup/index.html',true;
+        }
+        else {
+            window.location.href = 'pages/home/index.html',true;
+        }
     }
 }
 
@@ -233,6 +251,9 @@ function hideErrors(elements)
  */
 function main()
 {
+    //Debugging purposes
+    window.alert("login.js is being called");
+
     const loginButton = document.querySelector('#login');
     const newAccountButton = document.querySelector('#new-account');
     const createAccountButton = document.querySelector('#create-account')
