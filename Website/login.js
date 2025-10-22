@@ -5,6 +5,75 @@
  * @description this script handles login logic
  */
 
+/**
+ * Decrypt data given a key
+ * @param {String} encryptedData data to decrypt
+ * @param {String} key key given to decrypt data
+ * @returns {String} result decrypted data
+ */
+function decrypt(encryptedData, key)
+{
+    let result;
+    
+    try // try to decrypt the data
+    {
+        const decrypted = CryptoJS.AES.decrypt(encryptedData, key)
+        result = decrypted.toString(CryptoJS.enc.Utf8);
+    }
+    catch (e) // if data can't be decrypted set result to empty string
+    {
+        result = ""
+    }
+
+    // Return decrypted result
+    return result;
+}
+
+/**
+ * Try to load account from text, if text is invalid set account to
+ * undefined
+ * @param {String} text
+ * @returns {Account} account Account after attempting to load
+ */
+function tryLoadAccount(text)
+{
+    let account = new Account();
+
+    // try to load the data in JSON format
+    try
+    {
+        const dataJSON = JSON.parse(text)
+        account.load(dataJSON);
+    }
+    catch (e) // if can't load, then set account to undefined
+    {
+        account = null;
+    } 
+    
+    return account;
+}
+
+/**
+ * check if file given is a valid json file
+ * @param {File} file check if file is a valid JSON file
+ * @returns {bool} validFile boolean value indicating whether JSON file is valid
+ */
+function validJSONFile(file)
+{
+    let validFile = false;
+
+    // If json file is given load it
+    if (file)
+    {
+        // Check if valid file was given
+        if (file.name.includes('.json'))
+        {
+            validFile = true;
+        }
+    }
+
+    return validFile;
+}
 
 /**
  * login function triggered by login button.
@@ -12,7 +81,7 @@
  */
 async function login()
 {
-    let account = new Account();
+    let account = new Account();;
     const fileInput = document.querySelector('#user-file');
     const errorText = document.querySelector('.error-text');
 
@@ -22,21 +91,23 @@ async function login()
     const password = passwordInput.value;
 
     // Load user file from input if file is given
-    const file = fileInput.files[0]
+    const file = fileInput.files[0];
 
     // if valid file was given verify account details
     if (validJSONFile(file))
     {
         fileInput.classList.remove('red-border');
 
-        // Load file information
+        // Load and decrypt file data
         const fileText = await file.text();
-        const accountJSON = JSON.parse(fileText);
-        account.load(accountJSON);
+        const decryptedText = decrypt(fileText, username + password);
+
+        // Try and load data into account
+        account = tryLoadAccount(decryptedText);
 
         // Validate user credentials
         // if name or username is incorrect then give invalid login
-        if (account.name !== username || account.password !== password)
+        if (!account)
         {
             errorText.innerHTML = `Invalid Login, Please Try Again.`;
             errorText.classList.remove(`hidden`);
@@ -80,27 +151,7 @@ async function login()
     // }
 }
 
-/**
- * check if file given is a valid json file
- * @param {File} file check if file is a valid JSON file
- * @returns {bool} validFile boolean value indicating whether JSON file is valid
- */
-function validJSONFile(file)
-{
-    let validFile = false;
 
-    // If json file is given load it
-    if (file)
-    {
-        // Check if valid file was given
-        if (file.name.includes('.json'))
-        {
-            validFile = true;
-        }
-    }
-
-    return validFile;
-}
 
 
 /**

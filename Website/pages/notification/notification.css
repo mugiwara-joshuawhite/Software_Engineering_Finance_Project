@@ -68,9 +68,6 @@
 
 /* User interaction elements */
 .button {
-    padding-top: 5px;
-    padding-bottom: 5px;
-
     background-color: black;
     border-width: 4px;
 
@@ -88,6 +85,6 @@
 }
 
 .create-box {
+    margin-top: 5%;
     background-color: #212121;
-
 }

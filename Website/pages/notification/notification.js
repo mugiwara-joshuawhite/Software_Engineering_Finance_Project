@@ -57,6 +57,10 @@ function addNotifications(account)
 }
 
 
+/**
+ * Modify notifications of user account
+ * @param {Account} account user account
+ */
 function modifyNotifications(account)
 {
     const checkboxes = document.querySelectorAll(".checkbox")

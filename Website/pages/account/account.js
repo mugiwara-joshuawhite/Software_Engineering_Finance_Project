@@ -4,15 +4,20 @@
 async function linkDownloadButton()
 {
     const downloadAnchor = document.querySelector('#download-button')
+
+    // Load account
+    let account = new Account()
+    await account.loadFromStorage();
+
+    const key = account.name + account.password
     
-    // Open file 
-    const root = await navigator.storage.getDirectory();
-    const accountFile = await root.getFileHandle(ACCOUNT_FILE_NAME);
-    const readableFile = await accountFile.getFile();
+    // Encrypt account and prepare it for download
+    const encrypted = CryptoJS.AES.encrypt(JSON.stringify(account), key);
+    const encryptedBlob = new Blob([encrypted], {type: "text/plain"});
 
     // Get link to readable account file and attach it to anchor
     // as it's link
-    const fileURL = URL.createObjectURL(readableFile);
+    const fileURL = URL.createObjectURL(encryptedBlob);
     downloadAnchor.href = fileURL;
 }
 
