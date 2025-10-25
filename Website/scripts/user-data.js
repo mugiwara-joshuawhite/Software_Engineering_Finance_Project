@@ -23,7 +23,7 @@ class Account
     {
         this.name = name;
         this.password = password;
-        this.notifications = []
+        this.notifications = [];
     }
 
     /**
@@ -82,10 +82,6 @@ class Account
             const accountJSON = JSON.parse(await readableFile.text());
             this.load(accountJSON);
         }
-        else // no data, go back to root (login page).
-        {
-            window.location.href = "/";
-        }
     }
 
     /**
@@ -117,3 +113,6 @@ class UserNotification
         this.isRead = false;
     }
 }
+
+
+let account = new Account();

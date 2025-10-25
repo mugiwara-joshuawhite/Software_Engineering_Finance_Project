@@ -37,8 +37,6 @@ function decrypt(encryptedData, key)
  */
 function tryLoadAccount(text)
 {
-    let account = new Account();
-
     // try to load the data in JSON format
     try
     {
@@ -81,7 +79,6 @@ function validJSONFile(file)
  */
 async function login()
 {
-    let account = new Account();;
     const fileInput = document.querySelector('#user-file');
     const errorText = document.querySelector('.error-text');
 
@@ -204,9 +201,9 @@ async function createAccount()
     }
     else // create account of input username and password
     {
-        let account = new Account(username, password);
-
         // Wait for account to be saved before moving to home page
+        account.name = username;
+        account.password = password;
         await account.saveToStorage();
         window.location.href = '/pages/home';
     }

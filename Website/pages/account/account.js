@@ -1,9 +1,10 @@
 /**
  * Link download button to download anchor element
- * @param {Account} account | account object with data to link to dowload button
  */
-async function linkDownloadButton(account)
+async function linkDownloadButton()
 {
+    await account.loadFromStorage();
+    console.log(account);
     const downloadAnchor = document.querySelector('#download-button')
     const key = account.name + account.password
     
@@ -19,9 +20,8 @@ async function linkDownloadButton(account)
 
 /**
  * Clear user data and return to home page
- * @param {Account} account account to clear from storage
  */
-async function clearStorage(account)
+async function clearStorage()
 {
     await account.clearStorage();
     window.location.href = "/";
@@ -33,17 +33,11 @@ async function clearStorage(account)
  */
 async function main()
 {
-    let account = new Account();
-    await account.loadFromStorage();
-
     const clearDataButton = document.querySelector('#clear-data')
     
-    clearDataButton.addEventListener('click', function()
-    {
-        clearStorage(account)
-    });
+    clearDataButton.addEventListener('click', clearStorage);
 
-    linkDownloadButton(account);
+    linkDownloadButton();
 }
 
 main();

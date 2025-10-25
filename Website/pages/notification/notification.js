@@ -9,9 +9,8 @@
 
 /**
  * Load notifications from account
- * @param {Account} account 
  */
-function loadNotifications(account)
+function loadNotifications()
 {
     const notifications = account.notifications;
     const notificationList = document.querySelector('.notification-list'); 
@@ -44,9 +43,8 @@ function loadNotifications(account)
 
 /**
  * add notification data to user account
- * @param {Account} account user account
  */
-function addNotifications(account)
+function addNotifications()
 {
     let notification = new UserNotification('This is a notification', new Date());
 
@@ -59,14 +57,11 @@ function addNotifications(account)
 
 /**
  * Modify notifications of user account
- * @param {Account} account user account
  */
-function modifyNotifications(account)
+function modifyNotifications()
 {
     const checkboxes = document.querySelectorAll(".checkbox")
     const notificationList = document.querySelectorAll('li');
-
-    
 
     // for(let i = 0; i < notificationList.length; i++)
     // {
@@ -82,21 +77,16 @@ function modifyNotifications(account)
  */
 async function main()
 {
+    await account.loadFromStorage();
+
     const addButton = document.querySelector('#add-button');
     const modifyButton = document.querySelector('#modify-button');
 
-    let account = new Account();
-    await account.loadFromStorage();
+    // Add notification to account on addButton press
+    addButton.addEventListener('click', addNotifications)
 
-    //
-    addButton.addEventListener('click', function (){
-        addNotifications(account);
-    })
-
-    //
-    modifyButton.addEventListener('click', function (){
-        modifyNotifications(account);
-    })
+    // Modify notifications of account on button press
+    modifyButton.addEventListener('click', modifyNotifications)
 
     loadNotifications(account);
 }
