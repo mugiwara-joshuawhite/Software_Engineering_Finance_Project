@@ -4,3 +4,23 @@
     border: 5px solid rgba(243, 235, 95, 0.841);
     font-size: 2em;
 }
+.dropdown .content{
+    display:none;
+    position:absolute;
+    background-color:hsl(0, 0%, 95%);
+    min-width:100px;
+    box-shadow:2px 2px 5px hsl(0, 0%, 0%, 80%);
+}
+.dropdown{
+    display:block;
+}
+#day, #rate, #pay, #source-name{
+    background-color: black;
+}
+.content button{
+    background-color: black;
+}
+.dropdown:hover .content{
+    display:block;
+    position:relative;
+}

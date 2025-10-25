@@ -1,5 +1,11 @@
+<!--Setup Page-->
 <!DOCTYPE html>
 <html>
+
+    <!--Imports flatpickr for datetime functionality-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <head>
         <title>Monetally</title>
 
@@ -39,6 +45,39 @@
 
             <div class="dropdown">
                 <button class="button">Add income stream</button>
+                <div class="content" style="background-color:black; border:5px solid grey; border-radius:5px;">
+                    <p>I get paid every...</p>
+                    <select id="day">
+                        <option value="Su">Sunday</option>
+                        <option value="Mo">Monday</option>
+                        <option value="Tu">Tuesday</option>
+                        <option value="We">Wednesday</option>
+                        <option value="Th">Thursday</option>
+                        <option value="Fr">Friday</option>
+                        <option value="Sa">Saturday</option>
+                    </select>
+
+                    <p>At the rate...</p>
+                    <select id="rate">
+                        <option value="Week">Weekly</option>
+                        <option value="Biwe">Biweekly</option>
+                        <option value="Mont">Monthly</option>
+                        <option value="Bimo">Bimonthly</option>
+                        <option value="Firs">First of the month</option>
+                        <option value="Seco">Second of the month</option>
+                        <option value="Thir">Third of the month</option>
+                    </select>
+
+                    <p>Of amount...</p>
+                    <input type="number" id="pay">
+
+                    <p>What is this income source?</p>
+                    <input type="text" id="source-name">
+
+                    <button class="button" id="submit-stream">Submit</button>
+
+                </div>
+                
             </div>
         </div>
 
@@ -47,3 +86,4 @@
         <script src="template.js"></script>
     </body>
 </html>
+

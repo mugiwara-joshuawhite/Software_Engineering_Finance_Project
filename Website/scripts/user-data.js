@@ -8,9 +8,6 @@
 // Constant for account file name to avoid hardcoding it
 const ACCOUNT_FILE_NAME = "account.json";
 
-//Packages
-const flatpickr = require("flatpickr");
-
 /**
  * Account class
  */

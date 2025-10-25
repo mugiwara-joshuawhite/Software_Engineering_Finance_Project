@@ -118,9 +118,6 @@ async function createAccount()
     const password = passwordInput.value;
     const passwordConfirm = passwordConfirmInput.value;
 
-    //Debugging purposes
-    window.alert("createAccount() function is being reached");
-
     // Tests for input of username
     if (username.length < 5 || username.length > 25)
     {
@@ -172,14 +169,7 @@ async function createAccount()
     }
     else // create account of input username and password
     {
-
-        //Debugging purposes
-        window.alert("else reached");   //gets here
-
         let account = new Account(username, password);
-
-        //Debugging purposes
-        window.alert("account has been made");  //not here
 
         // Wait for account to be saved before moving to next page
         await account.saveToStorage();
@@ -251,9 +241,6 @@ function hideErrors(elements)
  */
 function main()
 {
-    //Debugging purposes
-    window.alert("login.js is being called");
-
     const loginButton = document.querySelector('#login');
     const newAccountButton = document.querySelector('#new-account');
     const createAccountButton = document.querySelector('#create-account')
