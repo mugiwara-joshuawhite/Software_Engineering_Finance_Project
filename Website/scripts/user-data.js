@@ -24,8 +24,11 @@ class Account
         this.name = name;
         this.password = password;
         this.notifications = [];
+        
         this.setup = false; //By default, set setup to false to indicate account has not been setup
-        this.streams = [];  //Array of streams, each element should have two parts - How much they get paid and how often
+        this.streams = [];  //Array of streams, each element should have four parts: [name, amount, rate, day]
+        this.expenses = []; //Array of expenses, each element should have three parts: [name, amount, rate]
+        this.distributions = []; //Array of dostributions, each element should have two parts: [name, percent]
     }
 
     /**
@@ -118,3 +121,5 @@ class UserNotification
         this.priority = priority;
     }
 }
+
+let account = new Account();

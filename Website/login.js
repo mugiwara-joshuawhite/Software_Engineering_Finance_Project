@@ -66,7 +66,15 @@ async function login()
         else // Correct login, save account and move to hompage
         {
             await account.saveToStorage();
-            window.location.href = 'pages/home/index.html',true; //https://stackoverflow.com/questions/15759020/window-location-href-doesnt-redirect
+
+            //If user quit out before finishing setup, send to setup page
+            if (account.setup == false) {
+                window.location.href = 'pages/setup/index.html',true;
+            }
+            else {
+                 window.location.href = 'pages/home/index.html',true; //https://stackoverflow.com/questions/15759020/window-location-href-doesnt-redirect
+            }
+           
         }
     }
     // else // Invalid input file, put red border to indicate invalid file
@@ -198,7 +206,7 @@ function toggleAccountCreation()
     const newAccountElements = document.querySelectorAll('.create');
     const loginButtons = document.querySelectorAll('.login');
     const errorElements = document.querySelectorAll('.red-border');
-    const errorText = document.querySelector('.error-text')
+    const errorText = document.querySelector('.error-text');
 
     toggleElements(newAccountElements);
     toggleElements(loginButtons);
@@ -243,8 +251,8 @@ function main()
 {
     const loginButton = document.querySelector('#login');
     const newAccountButton = document.querySelector('#new-account');
-    const createAccountButton = document.querySelector('#create-account')
-    const backButton = document.querySelector('#back')
+    const createAccountButton = document.querySelector('#create-account');
+    const backButton = document.querySelector('#back');
 
     loginButton.addEventListener('click', login);
     newAccountButton.addEventListener('click', toggleAccountCreation);
