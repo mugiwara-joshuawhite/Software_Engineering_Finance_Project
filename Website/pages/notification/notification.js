@@ -34,7 +34,7 @@ function loadNotifications()
         notification.classList.add('categories');
         divider.classList.add('bar');
 
-        let date = new Date(notifications[i].date);
+        let date = notifications[i].date;
 
         // Add notication text and date to display
         notification.innerHTML = `
