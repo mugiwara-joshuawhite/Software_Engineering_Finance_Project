@@ -259,6 +259,7 @@ function hideErrors(elements)
 }
 
 
+
 /**
  * Main function, mainly here to control scope of variables
  * But also to tidy up the script. 

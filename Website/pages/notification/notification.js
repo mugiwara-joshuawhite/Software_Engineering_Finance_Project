@@ -34,10 +34,11 @@ function loadNotifications()
         notification.classList.add('categories');
         divider.classList.add('bar');
 
-        let date = notifications[i].date;
+        const date = notifications[i].date;
 
         // Add notication text and date to display
         notification.innerHTML = `
+        <input type="checkbox" value=${i} class="completeCheckBox hidden" >
         <p class="notification-text"> ${notifications[i].text}
         <p class="date-text"> ${date.toDateString()}
         `;
@@ -185,6 +186,19 @@ function modifyNotifications()
 }
 
 
+function completeTask()
+{
+    const allSelectionBox = document.querySelectorAll(".completeCheckBox")
+
+    for(let i = 0; i < allSelectionBox.length; i++)
+    {
+        allSelectionBox[i].classList.toggle('hidden');
+    }
+
+
+}
+
+
 /**
  * Main function, limits scope.
  */
@@ -194,6 +208,8 @@ async function main()
 
     const addButton = document.querySelector('#add-button');
     const modifyButton = document.querySelector('#modify-button');
+    const completeButton = document.querySelector('#complete-button');
+
 
     // Notification creation buttons
     const addNotificationButton = document.querySelector('#add-notification');
@@ -204,6 +220,8 @@ async function main()
 
     // Modify notifications of account on button press
     modifyButton.addEventListener('click', modifyNotifications)
+
+    completeButton.addEventListener('click',completeTask)
 
 
     addNotificationButton.addEventListener('click', function () { addNotification(); });
