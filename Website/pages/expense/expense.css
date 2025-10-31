@@ -61,6 +61,7 @@
     margin: 0;
     text-align: left;
     
+    box-sizing: border-box;
 }
 
 .type-text {
@@ -69,6 +70,8 @@
 
     width: 25%;
     text-align: left;
+
+    box-sizing: border-box;
 }
 
 .amount-text {
@@ -77,6 +80,8 @@
 
     width: 25%;
     text-align: left;
+
+    box-sizing: border-box;
 }
 
 .reoccurance-text {
@@ -85,6 +90,8 @@
 
     width: 25%;
     text-align: left;
+
+    box-sizing: border-box;
 }
 
 /* Modification buttons */
