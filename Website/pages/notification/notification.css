@@ -42,6 +42,7 @@
     padding: 0;
 
     overflow-y: scroll;
+    scrollbar-width: none;
 
     list-style: none;
     word-wrap: break-word;
@@ -51,11 +52,12 @@
     margin: 0;
     padding: 0;
     display: flex;
+
+    padding-right: 10px;
 }
 
 .notification-text {
     box-sizing: border-box;
-    display: block;
     width: 75%;
 
     padding: 10px;
