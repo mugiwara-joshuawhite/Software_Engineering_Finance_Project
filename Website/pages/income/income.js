@@ -289,8 +289,8 @@ function deleteWarning(index)
 {
     const deleteDialog = document.querySelector('.delete-box');
     const deleteText = document.querySelectorAll('#delete-warning');
-    const confirmDelete = document.querySelector('#confirm-delete');
-    const cancelDelete = document.querySelector('#cancel-delete');
+    
+    deleteIndex = index;
 
     for(let i = 0; i < deleteText.length; i++)
     {
@@ -298,19 +298,15 @@ function deleteWarning(index)
     }
 
     deleteDialog.classList.remove('hidden');
-    confirmDelete.addEventListener('click', function (){ deleteIncome(index) });
-    cancelDelete.addEventListener('click', function (){ cancelWarning(index) })
 }
 
 /**
  * Removes the warning window for deleting a transaction.
  */
-function cancelWarning(index)
+function cancelWarning()
 {
     const deleteDialog = document.querySelector('.delete-box');
     const deleteText = document.querySelectorAll('#delete-warning');
-    const confirmDelete = document.querySelector('#confirm-delete');
-    const cancelDelete = document.querySelector('#cancel-delete');
 
     for(let i = 0; i < deleteText.length; i++)
     {
@@ -318,18 +314,16 @@ function cancelWarning(index)
     }
 
     deleteDialog.classList.add('hidden');
-    confirmDelete.removeEventListener('click', function (){ deleteIncome(index) });
-    cancelDelete.removeEventListener('click', function (){ cancelWarning(index) })
 }
 
 /**
  * Delete an income at the given index
  */
-function deleteIncome(index)
+function deleteIncome()
 {
-    console.log(account.income.splice(index, 1));
+    console.log(account.income.splice(deleteIndex, 1));
     account.saveToStorage();
-    cancelWarning(index); // Make warning dialog disappear
+    cancelWarning(); // Make warning dialog disappear
     loadIncome();
     deleteIncomes(); // Keep the delete options open
 }
@@ -358,6 +352,8 @@ async function main()
     const addButton = document.querySelector('#add-button');
     const modifyButton = document.querySelector('#modify-button');
     const deleteButton = document.querySelector('#delete-button');
+    const confirmDelete = document.querySelector('#confirm-delete');
+    const cancelDelete = document.querySelector('#cancel-delete');
 
     // Notification creation buttons
     const addNotificationButton = document.querySelector('#add-notification');
@@ -370,7 +366,9 @@ async function main()
     modifyButton.addEventListener('click', modifyIncomes);
 
     // Delete notifications prompts
-    deleteButton.addEventListener('click', deleteIncomes)
+    deleteButton.addEventListener('click', deleteIncomes);
+    confirmDelete.addEventListener('click', deleteIncome);
+    cancelDelete.addEventListener('click', cancelWarning);
 
     addNotificationButton.addEventListener('click', function () { addIncome(); });
     cancelNotificationButton.addEventListener('click', closeAddIncome);
@@ -379,3 +377,4 @@ async function main()
 }
 
 main()
+let deleteIndex = 0; // Used for deleting a specific index
