@@ -30,9 +30,8 @@ function loadNotifications()
 
         // Add notication text and date to display
         notification.innerHTML = `
-        <input type="checkbox" value=${i} class="completeCheckBox hidden" >
-        <p class="notification-text">${notifications[i].text}
-        <p class="date-text"> ${date.toDateString()}
+        <input type="checkbox" value=${i} class="completeCheckBox hidden" > 
+        <p class="notification-text">${notifications[i].text} <p class="date-text"> ${date.toDateString()}
         `;
 
         // Add Notification to the list.
