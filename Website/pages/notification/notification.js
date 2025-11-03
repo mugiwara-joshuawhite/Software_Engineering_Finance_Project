@@ -6,11 +6,19 @@
  * adding, modification, and removal of notifications
  */
 
+let abortController = new AbortController(); // allows for control over event listeners being canceled
+
 /**
  * open window to add notifications
  */
 function openAddNotifications()
 {
+    // Abort any operation pre-existing involving the notification and reset the controller
+    // to prepare for any operation using the notification panel
+    abortController.abort()
+    abortController = new AbortController();
+
+
     // Obtian all buttons
     const createBox = document.querySelector(".create-box");
     const errorText = document.querySelector('.error-text');
@@ -39,7 +47,7 @@ function openAddNotifications()
 function closeAddNotification()
 {
     const createBox = document.querySelector(".create-box");
-
+    
     createBox.classList.add('hidden');
 }
 
@@ -120,9 +128,11 @@ function modifyNotification(index)
     // To modify notificiation we add notification to specified index
     modifyNotificationButton.addEventListener('click', function (){
         addNotification(index);
-    })
-
+    },
+    { signal:abortController.signal }) // bind it to the abort controller to cancel it if not used
 }
+
+
 
 /**
  * Modify notifications of user account
@@ -205,9 +215,10 @@ async function main()
     addNotificationButton.addEventListener('click', addNotification);
     cancelNotificationButton.addEventListener('click', closeAddNotification);
 
-
     loadNotifications(account);
 }
+
+
 
 main()
 
