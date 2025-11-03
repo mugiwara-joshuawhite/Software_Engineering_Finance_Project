@@ -217,9 +217,3 @@ async function main() {
 }
 
 main();
-
-/**
- * Potential additions:
- * - Ability to remove data after submitting them
- *
- */
