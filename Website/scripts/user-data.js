@@ -18,12 +18,16 @@ class Account
      * to load user data
      * @param {string} name username of account
      * @param {string} password password of account
+     * @param {Array} income - Transactions of income
+     * @param {Array} expenses - Transactions of expenses
      */
     constructor(name, password)
     {
         this.name = name;
         this.password = password;
         this.notifications = [];
+        this.income = [];
+        this.expenses = [];
 
         this.setup = false; //By default, set setup to false to indicate account has not been setup
         this.streams = [];  //Array of streams, each element should have four parts: [name, amount, rate, day]
@@ -62,7 +66,19 @@ class Account
                 }
                 
             else
-                this.notifications = []; 
+                this.notifications = [];
+
+            // Ditto above for income
+            if (userData.income)
+                this.income = userData.income;
+            else
+                this.income = [];
+
+            // Ditto above for expenses
+            if (userData.expenses)
+                this.expenses = userData.expenses;
+            else
+                this.expenses = [];
         }
     }
 
@@ -132,6 +148,34 @@ class UserNotification
     
 }
 
-
+/**
+ * Transaction class
+ * Represents either income or expenses
+ */
+class Transaction
+{
+    /**
+     * 
+     * @param {string} text - Name of the transaction
+     * @param {string} type - Type of transaction (i.e. bills, loan, salary, etc.)
+     * @param {number} amount - How much money was involved in the transaction
+     * @param {Date} date - When the transaction first happened
+     * @param {Array} recurrance - How and when the transaction reoccurs, if at all. Empty if not.
+     * - First element is a string with type of recurrance (i.e. "daily")
+     * - Second element is X value of recurrance (i.e. every 30 days, X = 30)
+     * - Third element is Y value of recurrance (i.e. 2nd day of every 3rd month, Y = 30)
+     * - Fourth element is weekday of recurrance (i.e. every tuesday, "Tuesday")
+     * @param {Date} endDate - If reocurring, when the payment stops reocurring
+     */
+    constructor(text, type, amount, date, recurrance, endDate)
+    {
+        this.text = text;
+        this.type = type;
+        this.amount = amount;
+        this.date = date
+        this.recurrance = recurrance;
+        this.endDate = endDate;
+    }
+}
 
 let account = new Account();
