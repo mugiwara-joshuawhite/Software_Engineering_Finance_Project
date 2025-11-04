@@ -26,8 +26,6 @@ class Account
         this.name = name;
         this.password = password;
         this.notifications = [];
-        this.income = [];
-        this.expenses = [];
 
         this.setup = false; //By default, set setup to false to indicate account has not been setup
         this.streams = [];  //Array of streams, each element should have four parts: [name, amount, rate, day]
@@ -229,20 +227,23 @@ class Transaction
     /**
      * 
      * @param {string} text - Name of the transaction
-     * @param {string} type - Type of transaction (i.e. bills, loan, salary, etc.)
      * @param {number} amount - How much money was involved in the transaction
-     * @param {Date} date - When the transaction first happened
+     * @param {Date} date - When the transaction next happens
      * @param {Array} recurrance - How and when the transaction reoccurs, if at all. Empty if not.
      * - First element is a string with type of recurrance (i.e. "daily")
+     *      - "daily" - Every X days
+     *      - "monthly" - Every X weeks
+     *      - "yearly" - Every X years
+     *      - "specificDay" - The Xth day of every Yth month (i.e. the 1st day of every 2nd month (for every other month))
+     *      - "specificDayOfWeek" - The Xth (weekday dropdown) of every Yth month (i.e. the 1st Tuesday of every other month)
      * - Second element is X value of recurrance (i.e. every 30 days, X = 30)
      * - Third element is Y value of recurrance (i.e. 2nd day of every 3rd month, Y = 30)
      * - Fourth element is weekday of recurrance (i.e. every tuesday, "Tuesday")
      * @param {Date} endDate - If reocurring, when the payment stops reocurring
      */
-    constructor(text, type, amount, date, recurrance, endDate)
+    constructor(text, amount, date, recurrance, endDate)
     {
         this.text = text;
-        this.type = type;
         this.amount = amount;
         this.date = date
         this.recurrance = recurrance;
