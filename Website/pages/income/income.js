@@ -8,9 +8,14 @@
 
 let abortController = new AbortController(); // allows for control over event listeners being canceled
 
+/*
+*/
 function loadIncome()
 {
-    const incomeArray = account.income;
+    //Variables
+        //income streams
+    const incomeArray = account.streams;
+        //Notifications
     const notificationList = document.querySelector('.notification-list'); 
     notificationList.innerHTML = ''; // clear current notifications displayed
 
@@ -160,7 +165,6 @@ function addIncome(index)
 {
     // Get input fields
     const transactionTextInput = document.querySelector('#transaction-text');
-    const transactionCategoryInput = document.querySelector('#transaction-category');
     const transactionAmountInput = document.querySelector('#transaction-amount');
     const transactionDateInput = document.querySelector('#notification-date');
     const recurringInput = document.querySelector('#transaction-recurring');
@@ -219,8 +223,7 @@ function addIncome(index)
 
         // Create transaction
         let transaction = new Transaction(
-            transactionTextInput.value, 
-            transactionCategoryInput.value,
+            transactionTextInput.value,
             transactionAmountInput.value,
             date,
             recurrance,
@@ -229,11 +232,11 @@ function addIncome(index)
 
         // If index is a number (not undefined) then replace transaction
         if (Number.isInteger(index))
-            account.income[index] = transaction;
+            account.streams[index] = transaction;
         else // else add created transaction to end of list
-            account.income.push(transaction);
+            account.streams.push(transaction);
 
-        account.income.sort(compareIncomes);
+        account.streams.sort(compareIncomes);
         account.saveToStorage(); // save changes to storage
 
         // Reflect changes in notification display
@@ -329,7 +332,7 @@ function cancelWarning()
  */
 function deleteIncome()
 {
-    console.log(account.income.splice(deleteIndex, 1));
+    console.log(account.streams.splice(deleteIndex, 1));
     account.saveToStorage();
     cancelWarning(); // Make warning dialog disappear
     loadIncome();
@@ -355,10 +358,12 @@ function deleteIncomes()
  */
 async function main()
 {
+    //Load account from storage
     await account.loadFromStorage();
 
-    const addButton = document.querySelector('#add-button');
-    const modifyButton = document.querySelector('#modify-button');
+    //Elements
+    const addButton = document.querySelector('#add-button');    //Add Transaction
+    const modifyButton = document.querySelector('#modify-button');  //
     const deleteButton = document.querySelector('#delete-button');
     const confirmDelete = document.querySelector('#confirm-delete');
     const cancelDelete = document.querySelector('#cancel-delete');
