@@ -59,7 +59,6 @@ function loadIncome()
         // dude what even is this formatting
         transaction.innerHTML = `
         <p class="transaction-text"> ${incomeArray[i].text}
-        <p class="type-text"> ${incomeArray[i].type}
         <p class="amount-text"> ${incomeArray[i].amount}
         <p class="reoccurance-text"> ${isRecurring}
         `;
@@ -160,16 +159,16 @@ function closeAddIncome()
  */
 function addIncome(index)
 {
-    // Get input fields
-    const transactionTextInput = document.querySelector('#transaction-text');
-    const transactionAmountInput = document.querySelector('#transaction-amount');
-    const transactionDateInput = document.querySelector('#notification-date');
-    const recurringInput = document.querySelector('#transaction-recurring');
-    const recurringIntervalInput = document.querySelector('#recurring-interval');
-    const endDateInput = document.querySelector('#end-date');
-    const xInput = document.querySelector('#x-text');
-    const weekdayDropdown = document.querySelector('#weekday-dropdown');
-    const yInput = document.querySelector('#y-text');
+    //Elements
+    const transactionTextInput = document.querySelector('#transaction-text');   //Transaction name input
+    const transactionAmountInput = document.querySelector('#transaction-amount');   //Transaction amount input
+    const transactionDateInput = document.querySelector('#notification-date');  //Next pay date
+    const recurringInput = document.querySelector('#transaction-recurring');    //Is recurring?
+    const recurringIntervalInput = document.querySelector('#recurring-interval');   //How often does recur?
+    const endDateInput = document.querySelector('#end-date');   //When ends
+    const xInput = document.querySelector('#x-text');   //Every x day
+    const weekdayDropdown = document.querySelector('#weekday-dropdown');    //Weekday dropdown
+    const yInput = document.querySelector('#y-text');   //Of every y timeframe
 
     // Get error field
     const errorText = document.querySelector('.error-text');
@@ -187,6 +186,7 @@ function addIncome(index)
         }
     }
 
+    //Check for making sure all available fields are filled
     if (transactionTextInput.value.length <= 0 ||
         transactionAmountInput.value.length <= 0 ||
         transactionDateInput.value.length <= 0 ||
