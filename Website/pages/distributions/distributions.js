@@ -47,7 +47,7 @@ function loadDistributions() {
         // dude what even is this formatting
         distribution.innerHTML = `
         <p class="transaction-text"> ${DistributionArray[i][0]}
-        <p class="amount-text"> ${DistributionArray[i][1]}
+        <p class="amount-text"> ${DistributionArray[i][1]}%
         `;
 
         // Add expense to the list.
@@ -95,17 +95,6 @@ function openAddDistribution()
     createBox.classList.remove('hidden');
 }
 
-function modifyDistribution()
-{
-    const modifyButtons = document.querySelectorAll(".modify-button");
-
-
-    for(let i = 0; i < modifyButtons.length; i++)
-    {
-        modifyButtons[i].classList.toggle('hidden');
-    }
-}
-
 /**
  * Close window for adding distribution
  */
@@ -114,7 +103,6 @@ function closeAddDistribution() {
 
     createBox.classList.add('hidden');
 }
-
 
 /**
  * 
@@ -139,7 +127,7 @@ function checkDistributionTotal(newDistPercent) {
  * 
  * @param {int} index where in the array to put distribution
  */
-function addDistribution(index) {
+async function addDistribution(index) {
 
     //Input fields
     const distName = document.querySelector('#distribution-text');
@@ -147,6 +135,7 @@ function addDistribution(index) {
 
     //Error text
     const errorText = document.querySelector('#error-add');
+    const percentageText = document.querySelector("#");
 
     //Check for valid input
     if (distName.value != "") {
@@ -161,6 +150,9 @@ function addDistribution(index) {
                 );
             }
              //Refresh
+            distName.value = "";
+            distAmount.value = 1;
+            await account.saveToStorage();
             loadDistributions();
             closeAddDistribution();
         }
@@ -176,13 +168,47 @@ function addDistribution(index) {
     }
 }
 
+/**
+ * Show or hide modify Expense buttons on the Expense list
+ * TODO: If you press Modify Transaction and then Delete Transaction or vice versa, 
+ * both appear. we should make it so that one hides if the other appears
+ */
+function showOrHideModifyDistributions()
+{
+    const modifyButtons = document.querySelectorAll(".modify-button");
+
+
+    for(let i = 0; i < modifyButtons.length; i++)
+    {
+        modifyButtons[i].classList.toggle('hidden');
+    }
+}
+
+/**
+ * Open dialog to modify an existing Expense
+ */
+function modifyDistribution(index)
+{
+    // Obtain expense buttons
+    const addDistButton = document.querySelector('#add-distribution');
+    const modifyDistButton = document.querySelector('#modify-distribution');
+
+    // Hide add button and reveal modify button
+    openAddDistribution();
+    addDistButton.classList.add('hidden');
+    modifyDistButton.classList.remove('hidden');
+
+    // To modify expense we add expense to specified index
+    modifyDistButton.addEventListener('click', function (){
+        addDistribution(index)},
+        { signal:abortController.signal }
+    );
+}
+
 async function main() {
 
     //Get account
     await account.loadFromStorage();
-
-    //Debugging
-    account.distributions = [];
 
     //Elements
     const addButton = document.querySelector('#add-button'); //Add Distribution button
@@ -195,8 +221,8 @@ async function main() {
 
     //Listeners
     addButton.addEventListener('click', openAddDistribution);
-    modifyButton.addEventListener('click', modifyDistribution);
-    deleteButton.addEventListener('click', function() {print("not done :3")});
+    modifyButton.addEventListener('click', showOrHideModifyDistributions);
+    deleteButton.addEventListener('click', function() {window.alert("not done :3")});
     cancelDistributionButton.addEventListener('click', closeAddDistribution);
     distributionSlider.addEventListener('input', function() {
         percentageText.innerHTML = distributionSlider.value + "%";
