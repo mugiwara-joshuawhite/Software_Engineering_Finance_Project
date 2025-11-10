@@ -33,15 +33,17 @@
             <label for="distribution-text" style="font-weight: bold;">Distribution Name</label>
             <input type="text" class="small-text-input" id="distribution-text" placeholder="Savings"></input><br>
 
-            <label for="distribution-percentage" style="font-weight: bold;">Percentage</label>
-            <input type="range" class="slider" id="distribution-amount" placeholder="25" min="1" max="100"></input>
-            <p>x%</p>
+            <div class="slider-container">
+                <label for="distribution-percentage" style="font-weight: bold;">Percentage</label>
+                <input type="range" class="slider" id="distribution-amount" placeholder="25" min="1" max="100"></input>
+                <p id="percent">x%</p>
+            </div>
 
             <button class="button" id="add-distribution"> Add </button>
             <button class="button" id="modify-distribution"> Modify </button>
             <button class="button" id="cancel-distribution"> Cancel </button>
 
-            <p class="error-text hidden"> Error Text </p>
+            <p class="hidden error-text" id="error-add"> Error Text </p>
         </dialog>
 
         <!-- Confirm Deletion Dialog -->
@@ -56,16 +58,16 @@
         </dialog>
 
 
-        <div class="expense-page">
-            <div class="expense-tabs">
+        <div class="distribution-page">
+            <div class="distribution-tabs">
                 <button class="button" id="add-button"> Add Distribution </button>
                 <button class="button" id="modify-button"> Modify Distribution </button>
                 <button class="button" id="delete-button"> Delete Distribution </button>
             </div>
 
             <!-- Income Display -->
-            <div class="expense-details">
-                <p class="expense-title"> Distributions </p>
+            <div class="distribution-details">
+                <p class="distribution-title"> Distributions </p>
 
                 <div class="bar"> </div>
                 <div class="categories">

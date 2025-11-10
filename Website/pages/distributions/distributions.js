@@ -8,6 +8,7 @@
 let abortController = new AbortController();
 
 function loadDistributions() {
+
     const DistributionArray = account.distributions;
     const distributionList = document.querySelector('.distribution-list'); 
     distributionList.innerHTML = ''; // clear current expenses displayed
@@ -17,27 +18,27 @@ function loadDistributions() {
     {
         let distribution = document.createElement('li');
         let divider = document.createElement('div');
-        //let modifyButton = document.createElement('button');
-        //let deleteButton = document.createElement('button');
+        let modifyButton = document.createElement('button');
+        let deleteButton = document.createElement('button');
 
-        //modifyButton.innerHTML = 'Modify Distribution';
-        //modifyButton.classList.add('modify-button');
-        //modifyButton.classList.add('hidden');
+        modifyButton.innerHTML = 'Modify Distribution';
+        modifyButton.classList.add('modify-button');
+        modifyButton.classList.add('hidden');
 
         // Bind modify button to modify expense at index
-        //modifyButton.addEventListener('click', function(){
-        //    modifyDistribution(i);
-        //})
+        modifyButton.addEventListener('click', function(){
+            modifyDistribution(i);
+        })
 
-        // Set up delete button
-        //deleteButton.innerHTML = 'Delete Distribution';
-        //deleteButton.classList.add('delete-button');
-        //deleteButton.classList.add('hidden');
+        //Set up delete button
+        deleteButton.innerHTML = 'Delete Distribution';
+        deleteButton.classList.add('delete-button');
+        deleteButton.classList.add('hidden');
 
         // Bind delete button to delete expense at index
-        //deleteButton.addEventListener('click', function(){
-        //    deleteWarning(i);
-        //})
+        deleteButton.addEventListener('click', function(){
+            deleteWarning(i);
+        })
         
         distribution.classList.add('categories');
         divider.classList.add('bar');
@@ -54,8 +55,8 @@ function loadDistributions() {
             `<input type="checkbox" class="hidden checkbox" id="checkbox-${i}">`
             + distribution.innerHTML;
         distributionList.appendChild(distribution);
-        //expenseList.appendChild(modifyButton);
-        //expenseList.appendChild(deleteButton);
+        distributionList.appendChild(modifyButton);
+        distributionList.appendChild(deleteButton);
         distributionList.appendChild(divider);
     }
 }
@@ -134,8 +135,45 @@ function checkDistributionTotal(newDistPercent) {
     return totalPercent + parseInt(newDistPercent);
 }
 
+/**
+ * 
+ * @param {int} index where in the array to put distribution
+ */
 function addDistribution(index) {
-    
+
+    //Input fields
+    const distName = document.querySelector('#distribution-text');
+    const distAmount = document.querySelector('#distribution-amount');
+
+    //Error text
+    const errorText = document.querySelector('#error-add');
+
+    //Check for valid input
+    if (distName.value != "") {
+        if (checkDistributionTotal(distAmount.value) < 100) {
+            if (Number.isInteger(index)) {
+                account.distributions[index] = 
+                    [distName.value, distAmount.value];
+            }
+            else {
+                account.distributions.push(
+                    [distName.value, distAmount.value]
+                );
+            }
+             //Refresh
+            loadDistributions();
+            closeAddDistribution();
+        }
+        else {
+            errorText.innerHTML = "Your percentages will go over 100% of income if you add this! Delete some other distributions first.";
+            errorText.classList.remove('hidden');
+        }
+    }
+    else {
+        //Literally why is it not showing
+        errorText.innerHTML = "Missing value! Can't add distribution";
+        errorText.classList.remove('hidden');
+    }
 }
 
 async function main() {
@@ -143,20 +181,33 @@ async function main() {
     //Get account
     await account.loadFromStorage();
 
+    //Debugging
+    account.distributions = [];
+
     //Elements
     const addButton = document.querySelector('#add-button'); //Add Distribution button
     const modifyButton = document.querySelector('#modify-button');  //Modify Distribution button
     const deleteButton = document.querySelector('#delete-button');  //Delete Distribution button
     const cancelDistributionButton = document.querySelector('#cancel-distribution');
+    const distributionSlider = document.querySelector('#distribution-amount');
+    const percentageText = document.querySelector('#percent');
+    const addDistButton = document.querySelector('#add-distribution');
 
     //Listeners
     addButton.addEventListener('click', openAddDistribution);
     modifyButton.addEventListener('click', modifyDistribution);
     deleteButton.addEventListener('click', function() {print("not done :3")});
     cancelDistributionButton.addEventListener('click', closeAddDistribution);
+    distributionSlider.addEventListener('input', function() {
+        percentageText.innerHTML = distributionSlider.value + "%";
+    });
+    addDistButton.addEventListener('click', addDistribution);
 
     //Load distributions on page open
     loadDistributions();
+
+    //Initialize percentage
+    percentageText.innerHTML = distributionSlider.value + "%";
 }
 
 //Call main

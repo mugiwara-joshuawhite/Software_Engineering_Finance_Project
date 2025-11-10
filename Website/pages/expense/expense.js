@@ -277,6 +277,8 @@ function modifyExpense(index)
 
 /**
  * Show or hide modify Expense buttons on the Expense list
+ * TODO: If you press Modify Transaction and then Delete Transaction or vice versa, 
+ * both appear. we should make it so that one hides if the other appears
  */
 function modifyExpenses()
 {
@@ -337,6 +339,8 @@ function deleteExpense()
 
 /**
  * Open or close delete Expense buttons on the Expense list
+ * TODO: If you press Modify Transaction and then Delete Transaction or vice versa, 
+ * both appear. we should make it so that one hides if the other appears
  */
 function deleteExpenses()
 {
