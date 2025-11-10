@@ -236,6 +236,50 @@ function showOrHideDeleteDistributions()
     }
 }
 
+/**
+ * Warns the user before deleting data at the specified index.
+ */
+function deleteWarning(index)
+{
+    const deleteDialog = document.querySelector('.delete-box');
+
+    //Why is this text clickable?
+    const deleteText = document.querySelectorAll('#delete-warning');
+    
+    deleteIndex = index;
+
+    for(let i = 0; i < deleteText.length; i++)
+    {
+        deleteText[i].classList.remove('hidden');
+    }
+
+    deleteDialog.classList.remove('hidden');
+}
+
+async function deleteDistribution(deleteIndex) {
+    console.log(account.distributions.splice(deleteIndex, 1));
+    await account.saveToStorage();
+    cancelWarning(); // Make warning dialog disappear
+    loadDistributions();
+    showOrHideDeleteDistributions(); // Keep the delete options open
+}
+
+/**
+ * Removes the warning window for deleting a transaction.
+ */
+function cancelWarning()
+{
+    const deleteDialog = document.querySelector('.delete-box');
+    const deleteText = document.querySelectorAll('#delete-warning');
+
+    for(let i = 0; i < deleteText.length; i++)
+    {
+        deleteText[i].classList.add('hidden');
+    }
+
+    deleteDialog.classList.add('hidden');
+}
+
 async function main() {
 
     //Get account
@@ -249,6 +293,8 @@ async function main() {
     const distributionSlider = document.querySelector('#distribution-amount');
     const percentageText = document.querySelector('#percent');
     const addDistButton = document.querySelector('#add-distribution');
+    const confirmDeleteButton = document.querySelector('#confirm-delete');
+    const cancelDeleteButton = document.querySelector('#cancel-delete');
 
     //Listeners
     addButton.addEventListener('click', openAddDistribution);
@@ -259,6 +305,8 @@ async function main() {
         percentageText.innerHTML = distributionSlider.value + "%";
     });
     addDistButton.addEventListener('click', addDistribution);
+    confirmDeleteButton.addEventListener('click', deleteDistribution);
+    cancelDeleteButton.addEventListener('click', cancelWarning);
 
     //Load distributions on page open
     loadDistributions();

@@ -342,7 +342,7 @@ function deleteIncome()
     account.saveToStorage();
     cancelWarning(); // Make warning dialog disappear
     loadIncome(account);
-    deleteIncomes(); // Keep the delete options open
+    showOrHideDeleteIncomes(); // Keep the delete options open
 }
 
 /**

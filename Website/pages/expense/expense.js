@@ -341,7 +341,7 @@ function deleteExpense()
     account.saveToStorage();
     cancelWarning(); // Make warning dialog disappear
     loadExpense();
-    deleteExpenses(); // Keep the delete options open
+    showOrHideDeleteExpenses(); // Keep the delete options open
 }
 
 /**
