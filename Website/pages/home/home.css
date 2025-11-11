@@ -39,15 +39,14 @@ li {
     align-items: flex-start;
     
     width: 40%;
-    max-height: 250px;
-
+}
+.income-list {
+    max-height:250px;
     overflow-y:scroll;
 }
 
 .finance-header {
-    /*Made a bit smaller because it was causing issues
-    with overflow*/
-    width: 95%;
+    width: 100%;
 
     background-color: #454849;
     padding-top: 15px;
