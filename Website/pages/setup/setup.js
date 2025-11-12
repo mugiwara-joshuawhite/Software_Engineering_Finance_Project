@@ -57,7 +57,7 @@ function addStream() {
 
     payName = payNameSelector.value;
     payAmount = payAmountSelector.value;
-    payDay = payDaySelector.value;
+    payDay = new Date(payDaySelector.value.replace('-', '/'));
     payRecur = [payRateTypeSelector.value, 
                 payRateXSelector.value,
                 payRateYSelector.value];
