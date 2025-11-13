@@ -8,6 +8,30 @@
 
 let abortController = new AbortController(); // allows for control over event listeners being canceled
 
+
+function expense_notifications()
+{
+    account.expenses.forEach((Expense)=> 
+    {
+
+        let text = `${Expense.text} | Amount Due: $${Expense.amount} `
+        let date = new Date(Expense.date)
+
+        let notification = new UserNotification(text,date)
+
+        let matchingNotifications = account.notifications.filter((notifcation) =>  text === notifcation.text)
+
+        if(matchingNotifications.length > 0)
+            matchingNotifications[0].date = date 
+        else 
+            account.notifications.push(notification);
+        
+        account.saveToStorage()
+
+    })
+    
+}
+
 /**
  * open window to add notifications
  */
@@ -219,6 +243,8 @@ async function main()
 
     addNotificationButton.addEventListener('click', addNotification);
     cancelNotificationButton.addEventListener('click', closeAddNotification);
+
+    expense_notifications()
 
     loadNotifications(account);
 }
