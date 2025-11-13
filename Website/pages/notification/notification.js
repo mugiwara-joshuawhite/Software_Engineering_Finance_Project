@@ -148,7 +148,9 @@ function modifyNotifications()
     }
 }
 
-
+/**
+ * Show check boxes to mark tasks complete
+ */
 function showCompleteTasks()
 {
     const allSelectionBox = document.querySelectorAll(".completeCheckBox");
@@ -161,6 +163,9 @@ function showCompleteTasks()
     allSelectionBox.forEach((checkbox) => checkbox.classList.remove('hidden'));
 }
 
+/**
+ * Remove all tasks marked as complete
+ */
 function confirmCompleteTasks()
 {
     const allSelectionBox = document.querySelectorAll(".completeCheckBox");
