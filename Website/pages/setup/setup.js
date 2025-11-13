@@ -61,7 +61,7 @@ function addStream() {
     payRecur = [payRateTypeSelector.value, 
                 payRateXSelector.value,
                 payRateYSelector.value];
-    payEnd = new Date("9999-12-31");
+    payEnd = new Date("9999/12/31");
 
     //Add stream to account
     if (payName === "") {

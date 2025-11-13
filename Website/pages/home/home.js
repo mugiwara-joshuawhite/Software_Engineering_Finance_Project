@@ -10,6 +10,10 @@ function loadIncome() {
     //Loop through streams
     for (let i = 0; i < streams.length; i++) {
 
+        //Other variables
+            //3 is the smallest a fincance object can be
+        let streamLength = 3;
+
         //Main parts of a stream, the name and the data
         let category = document.createElement('button');
         let list = document.createElement('ul');
@@ -24,19 +28,68 @@ function loadIncome() {
             document.createElement('span'),
         ];
 
+        //Fill out category
+        category.innerHTML = streams[i].text;
+        category.classList.add("finance-category");
+        //TODO: add event listener to expand stream on category
+
+        items[0].innerHTML = "Amount: $";
+        items[1].innerHTML = "Next Payday: ";
+        items[2].innerHTML = "Goes until: ";
+        
+        //TODO: Format dates better
+        data[0].innerHTML = addCommasToInt(streams[i].amount);
+        data[1].innerHTML = prettyDate(new Date(streams[i].date));
+        data[2].innerHTML = prettyDate(new Date(streams[i].endDate));
+
         //Recurrance data
-            /*If this stream recurs
-        if (streams[i].recurrance.length == 3) {
-            items.push([document.createElement('li'),
-                document.createElement('li'),
-                document.createElement('li')
-            ]);
-            data.push([document.createElement('span'),
-                document.createElement('span'),
-                document.createElement('span')
-            ]);
+            //If this stream recurs
+        if (streams[i].recurrance.length > 0) {
+            items.push(document.createElement('li'));
+            data.push(document.createElement('span'));
+            items[3].innerHTML = "Recurrance: ";
+            data[3].innerHTML = prettyRecurrance(streams[i].recurrance);
+            streamLength = 4;
         }
-        */
+        
+        //If there were a way to know how many values an object had i would do this differently
+        for (let j = 0; j < streamLength; j++) {
+            data[j].classList.add('income-text');
+            items[j].appendChild(data[j]);
+            list.appendChild(items[j]);
+        }
+
+        incomeList.appendChild(category);
+        incomeList.appendChild(list);
+    }
+}
+
+function loadExpense() {
+    
+    //Values
+    const expenses = account.expenses;    //Data to show
+    const incomeList = document.querySelector(".income-list");  //Where to show the data
+
+    //Loop through streams
+    for (let i = 0; i < streams.length; i++) {
+
+        //Other variables
+            //3 is the smallest a fincance object can be
+        let streamLength = 3;
+
+        //Main parts of a stream, the name and the data
+        let category = document.createElement('button');
+        let list = document.createElement('ul');
+
+        let items = [document.createElement('li'),  //Amount
+            document.createElement('li'),           //Next due date
+            document.createElement('li'),           //End date
+        ];
+        //Data holds the actual values of each item
+        let data = [document.createElement('span'),
+            document.createElement('span'),
+            document.createElement('span'),
+        ];
 
         //Fill out category
         category.innerHTML = streams[i].text;
@@ -51,9 +104,19 @@ function loadIncome() {
         data[0].innerHTML = addCommasToInt(streams[i].amount);
         data[1].innerHTML = prettyDate(new Date(streams[i].date));
         data[2].innerHTML = prettyDate(new Date(streams[i].endDate));
+
+        //Recurrance data
+            //If this stream recurs
+        if (streams[i].recurrance.length > 0) {
+            items.push(document.createElement('li'));
+            data.push(document.createElement('span'));
+            items[3].innerHTML = "Recurrance: ";
+            data[3].innerHTML = prettyRecurrance(streams[i].recurrance);
+            streamLength = 4;
+        }
         
         //If there were a way to know how many values an object had i would do this differently
-        for (let j = 0; j < 3; j++) {
+        for (let j = 0; j < streamLength; j++) {
             data[j].classList.add('income-text');
             items[j].appendChild(data[j]);
             list.appendChild(items[j]);
@@ -62,6 +125,34 @@ function loadIncome() {
         incomeList.appendChild(category);
         incomeList.appendChild(list);
     }
+}
+
+/**
+ * 
+ * @param {number} num 
+ * @description converts a number to a position
+ * e.g. 1 -> "1st", 2 -> "2nd" 3 -> "3rd", 4 -> "4th"
+ */
+function intToPosition(num) {
+
+    let suffix = "";
+    switch (num) {
+        case 1: 
+            suffix = "st";
+            break;
+        case 2:
+            suffix = "nd";
+            break;
+        case 3:
+            suffix = "rd";
+            break;
+        default:
+            suffix = "th";
+            break;
+    }
+
+    //Number.toString() takes base of number and number to convert
+    return num.toString(10, num) + suffix;
 }
 
 /**
@@ -133,12 +224,10 @@ function addCommasToInt(num) {
 /**
  * 
  * @param {Date} date 
- * @description: Takes a date object and returns in form:
+ * @description Takes a date object and returns in form:
  * <name of month> <date><th/st/rd> <year>
  */
 function prettyDate(date) {
-
-    window.alert(typeof(date));
 
     let months = ["January",
         "February",
@@ -154,26 +243,69 @@ function prettyDate(date) {
         "December"
     ];
 
-    let day = date.getDate();
-    let suffix = "";
-    switch (day) {
-        case 1: 
-            suffix = "st";
+    let day = intToPosition(date.getDate());
+
+    let pretty = months[date.getMonth()] + " " + day + " " + date.getFullYear();
+    return pretty;
+}
+
+/**
+ * 
+ * @param {Array} recurrance 
+ * @description an array recurrance featuring rate of payment, an x, and optional y 
+ * or y and weekday returned in a more readable form
+ */
+function prettyRecurrance(recurrance) {
+
+    let rate = recurrance[0];
+    let x = 0;
+    let y = 0;
+    let weekday = "";
+
+    //Set x, y, and weekday based on length of recurrance
+    if (recurrance.length > 0) {
+        x = Number(recurrance[1]);
+    }
+    if (recurrance.length > 1) {
+        y = Number(recurrance[2]);
+    }
+    if (recurrance.length > 2) {
+        weekday = recurrance[3];
+    }
+
+    let prettyRate = "";
+
+    //it may be possible to have day vs days without needing day(s)
+    //but idk not a huge issue rn
+    switch (rate) {
+        case "daily":
+            prettyRate = "Every X day(s)";
+            prettyRate = prettyRate.replace("X", x);
             break;
-        case 2:
-            suffix = "nd";
+        case "monthly":
+            prettyRate = "Every X month(s)";
+            prettyRate = prettyRate.replace("X", x);
             break;
-        case 3:
-            suffix = "rd";
+        case "yearly":
+            prettyRate = "Every X year(s)";
+            prettyRate = prettyRate.replace("X", x);
             break;
-        default:
-            suffix = "th";
+        case "specificDay":
+            prettyRate = "X day of every Y month(s)";
+            prettyRate = prettyRate.replace("X",intToPosition(x));
+            prettyRate = prettyRate.replace("Y", y);
+            break;
+        case "specificDayOfWeek":
+            prettyRate = "X W of every Y month";
+            prettyRate = prettyRate.replace("X", intToPosition(x));
+            prettyRate = prettyRate.replace("Y", intToPosition(y));
+            prettyRate = prettyRate.replace("W", weekday);
             break;
     }
 
-    let pretty = months[date.getMonth()] + " " + day + suffix + " " + date.getFullYear();
-    return pretty;
+    return prettyRate;
 }
+
 
 async function main() {
     await account.loadFromStorage();

@@ -230,7 +230,7 @@ class Transaction
      * @param {Array} recurrance - How and when the transaction reoccurs, if at all. Empty if not.
      * - First element is a string with type of recurrance (i.e. "daily")
      *      - "daily" - Every X days
-     *      - "monthly" - Every X weeks
+     *      - "monthly" - Every X months
      *      - "yearly" - Every X years
      *      - "specificDay" - The Xth day of every Yth month (i.e. the 1st day of every 2nd month (for every other month))
      *      - "specificDayOfWeek" - The Xth (weekday dropdown) of every Yth month (i.e. the 1st Tuesday of every other month)
