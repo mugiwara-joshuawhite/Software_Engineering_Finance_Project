@@ -13,21 +13,26 @@ function expense_notifications()
 {
     account.expenses.forEach((Expense)=> 
     {
-
-        let text = `${Expense.text} | Amount Due: $${Expense.amount} `
-        let date = new Date(Expense.date)
-
-        let notification = new UserNotification(text,date)
-
-        let matchingNotifications = account.notifications.filter((notifcation) =>  text === notifcation.text)
-
-        if(matchingNotifications.length > 0)
-            matchingNotifications[0].date = date 
-        else 
-            account.notifications.push(notification);
+        let endDate = new Date(Expense.endDate);
+        let expenseDate = new Date(Expense.date)
+        let currentDate = new Date()
         
-        account.saveToStorage()
+        if (expenseDate > currentDate || endDate > currentDate)
+        {
+            let text = `${Expense.text} | Amount Due: $${Expense.amount} `
+            
 
+            let notification = new UserNotification(text, expenseDate)
+
+            let matchingNotifications = account.notifications.filter((notifcation) =>  text === notifcation.text)
+
+            if(matchingNotifications.length > 0)
+                matchingNotifications[0].date = expenseDate 
+            else 
+                account.notifications.push(notification);
+            
+            account.saveToStorage()
+        }
     })
     
 }
