@@ -9,6 +9,39 @@
 let abortController = new AbortController(); // allows for control over event listeners being canceled
 
 /**
+ * Add notifications for each expense
+ */
+function expense_notifications()
+{
+    // For each expense add a notification
+    account.expenses.forEach((Expense)=> 
+    {
+        let endDate = new Date(Expense.endDate);
+        let expenseDate = new Date(Expense.date)
+        let currentDate = new Date()
+
+        // If the expense is current then form it's notification
+        if (expenseDate > currentDate || endDate > currentDate)
+        {
+            let text = `${Expense.text} | Amount Due: $${Expense.amount} `
+            
+            let notification = new UserNotification(text, expenseDate)
+
+            let matchingNotifications = account.notifications.filter((notifcation) =>  text === notifcation.text)
+
+            // if there is a matching notification given, then update the date
+            if(matchingNotifications.length > 0)
+                matchingNotifications[0].date = expenseDate 
+            else // else add a new notification to the account for the expense
+                account.notifications.push(notification);
+            
+            account.saveToStorage()
+        }
+    })
+    
+}
+
+/**
  * open window to add notifications
  */
 function openAddNotifications()
@@ -148,7 +181,9 @@ function modifyNotifications()
     }
 }
 
-
+/**
+ * Show check boxes to mark tasks complete
+ */
 function showCompleteTasks()
 {
     const allSelectionBox = document.querySelectorAll(".completeCheckBox");
@@ -161,6 +196,9 @@ function showCompleteTasks()
     allSelectionBox.forEach((checkbox) => checkbox.classList.remove('hidden'));
 }
 
+/**
+ * Remove all tasks marked as complete
+ */
 function confirmCompleteTasks()
 {
     const allSelectionBox = document.querySelectorAll(".completeCheckBox");
@@ -214,6 +252,8 @@ async function main()
 
     addNotificationButton.addEventListener('click', addNotification);
     cancelNotificationButton.addEventListener('click', closeAddNotification);
+
+    expense_notifications()
 
     loadNotifications(account);
 }
