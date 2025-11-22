@@ -345,7 +345,8 @@ function prettyRecurrance(recurrance) {
 }
 
 /**
- * @description Makes a graph based on the account's unallocated income and expenses. Ignores income that was set aside of a distribution
+ * @description Makes a graph based on the account's unallocated income and expenses. Ignores income that was set aside of a distribution.
+ * dude why is the function this massive it is LITERALLY just a GRAPH
  */
 function makeGraph()
 {
@@ -382,11 +383,68 @@ function makeGraph()
     // Get relevant income objects
     for (let i = 0; i < incomeArray.length; i++)
     {
-        if (new Date(incomeArray[i].date) > lastMonth && new Date(incomeArray[i].date) <= today)
+        if (incomeArray[i].recurrance.length == 0)
         {
-            totalIncome.push(incomeArray[i]);
-            temp = incomeArray[i].amount;
-            incomeSum += temp * distributed
+            if (new Date(incomeArray[i].date) > lastMonth && new Date(incomeArray[i].date) <= today)
+            {
+                totalIncome.push(incomeArray[i]);
+                temp = Number(incomeArray[i].amount);
+                incomeSum += temp * distributed
+            }
+        }
+
+        else // i hate recurrance
+        {
+            var inScope = true
+            var tempDate = new Date(incomeArray[i].date)
+
+            while (inScope)
+            {
+                if (tempDate > lastMonth && tempDate <= today)
+                {
+                    totalIncome.push(incomeArray[i]);
+                    temp = Number(incomeArray[i].amount);
+                    incomeSum += temp * distributed
+                }
+                else if (tempDate > today)
+                {
+                    inScope = false;
+                    break;
+                }
+
+                switch(incomeArray[i].recurrance[0])
+                {
+                    case "daily":
+                        tempDate.setDate(tempDate.getDate() + Number(incomeArray[i].recurrance[1]))
+                        break;
+                    case "monthly":
+                        tempDate.setMonth(tempDate.getMonth() + Number(incomeArray[i].recurrance[1]))
+                        break;
+                    case "yearly":
+                        tempDate.setFullYear(tempDate.getFullYear() + Number(incomeArray[i].recurrance[1]))
+                        break;
+                    case "specificDay":
+                        tempDate.setMonth(tempDate.getMonth() + Number(incomeArray[i].recurrance[2]))
+                        tempDate.setDate(Number(incomeArray[i].recurrance[1]))
+                        break;
+                    case "specificDayOfWeek":
+                        tempDate.setMonth(tempDate.getMonth() + Number(incomeArray[i].recurrance[2])) // Go to correct month to start at (last one + 1)
+                        tempDate.setDate(1) // Go to the first day of the month
+                        
+                        while (tempDate.getDay() != days.get(incomeArray[i].recurrance[4])) // Add until we get to the first specified weekday of that month
+                        {
+                            tempDate.setDate(tempDate.getDate() + Number(incomeArray[i].recurrance[1]))
+                        }
+
+                        for (let i = 1; i < incomeArray[i].recurrance[1]; i++) // Move to correct month
+                        {
+                            tempDate.setDate(tempDate.getDate() + 7)
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
     }
 
@@ -398,7 +456,7 @@ function makeGraph()
             if (new Date(expenseArray[i].date) > lastMonth && new Date(expenseArray[i].date) <= today)
             {
                 totalExpenses.push(expenseArray[i]);
-                expenseSum += expenseArray[i].amount;
+                expenseSum += Number(expenseArray[i].amount);
             }
         }
 
@@ -406,37 +464,49 @@ function makeGraph()
         {
             var inScope = true
             var tempDate = new Date(expenseArray[i].date)
+
             while (inScope)
             {
                 if (tempDate > lastMonth && tempDate <= today)
                 {
-                    totalIncome.push(expenseArray[i]);
-                    temp = expenseArray[i].amount;
-                    expenseSum += temp * distributed
+                    totalExpenses.push(expenseArray[i]);
+                    expenseSum += Number(expenseArray[i].amount);
+                }
+                else if (tempDate > today)
+                {
+                    inScope = false;
+                    break;
                 }
 
                 switch(expenseArray[i].recurrance[0])
                 {
                     case "daily":
-                        tempDate.setDate(tempDate.getDate() + expenseArray[i].recurrance[1])
+                        tempDate.setDate(tempDate.getDate() + Number(expenseArray[i].recurrance[1]))
                         break;
                     case "monthly":
-                        tempDate.setMonth(tempDate.getMonth() + expenseArray[i].recurrance[1])
+                        tempDate.setMonth(tempDate.getMonth() + Number(expenseArray[i].recurrance[1]))
                         break;
                     case "yearly":
-                        tempDate.setFullYear(tempDate.getFullYear() + expenseArray[i].recurrance[1])
+                        tempDate.setFullYear(tempDate.getFullYear() + Number(expenseArray[i].recurrance[1]))
                         break;
                     case "specificDay":
-                        tempDate.setMonth(tempDate.getMonth() + expenseArray[i].recurrance[2])
-                        tempDate.setDate(expenseArray[i].recurrance[1])
+                        tempDate.setMonth(tempDate.getMonth() + Number(expenseArray[i].recurrance[2]))
+                        tempDate.setDate(Number(expenseArray[i].recurrance[1]))
                         break;
                     case "specificDayOfWeek":
-                        tempDate.setMonth(tempDate.getMonth() + expenseArray[i].recurrance[2])
-                        tempDate.setDate(1)
-                        if (tempDate.getDay < days.get(expenseArray[i].recurrance[3]))
+                        tempDate.setMonth(tempDate.getMonth() + Number(expenseArray[i].recurrance[2])) // Go to correct month to start at (last one + 1)
+                        tempDate.setDate(1) // Go to the first day of the month
+                        
+                        while (tempDate.getDay() != days.get(expenseArray[i].recurrance[4])) // Add until we get to the first specified weekday of that month
                         {
-                            tempDate.setDate(tempDate.getDate() + (tempDate.getDay()))
+                            tempDate.setDate(tempDate.getDate() + Number(expenseArray[i].recurrance[1]))
                         }
+
+                        for (let i = 1; i < expenseArray[i].recurrance[1]; i++) // Move to correct month
+                        {
+                            tempDate.setDate(tempDate.getDate() + 7)
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -458,9 +528,27 @@ function makeGraph()
     }
 
     for (let i = 0; i < totalExpenses.length; i++)
-    {
-        data.addRow([totalExpenses[i].text, Number(totalExpenses[i].amount)]);
-        console.log("hi")
+    {   
+        let tempRow = [totalExpenses[i].text, Number(totalExpenses[i].amount)]
+        let dupes = 0
+        
+        for (let j = i+1; j < totalExpenses.length; j++)
+        {
+            let tempRow2 = [totalExpenses[j].text, Number(totalExpenses[j].amount)]
+            if (tempRow[0] == tempRow2[0] && tempRow[1] == tempRow2[1])
+            {
+                dupes += 1
+                i += 1
+            }
+        }
+
+        let tempAmount = tempRow[1];
+        for (let i = 0; i < dupes; i++)
+        {
+            tempRow[1] += tempAmount;
+        }
+
+        data.addRow(tempRow);
     }
 
     var chartArea = document.getElementById('chart_div');
