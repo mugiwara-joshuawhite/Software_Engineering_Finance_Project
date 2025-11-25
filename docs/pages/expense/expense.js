@@ -213,7 +213,17 @@ function addExpense(index)
     {
         // Replace dashes in transactionDate with
         let date = new Date(transactionDateInput.value.replace('-', '/'));
-        let endDate = new Date(endDateInput.value.replace('-', '/'));
+         
+        //Changed it so that endDate is same as date if not recurring
+        //as it made endDate null before
+        //Also idk why it's making the dates so detailed now
+        let endDate = new Date();
+        if (recurringInput.checked) {
+            endDate = new Date(endDateInput.value.replace('-', '/'));
+        }
+        else {
+            endDate = new Date(date);
+        }
         
         // Create recurrance array
         let recurrance = [];

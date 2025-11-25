@@ -43,7 +43,7 @@ li {
     
     width: 40%;
 }
-.income-list {
+.income-lists-container {
     max-height:250px;
     overflow-y:scroll;
 }
@@ -104,4 +104,17 @@ li {
 
 .expense-text {
     color: red;
+}
+
+.data-time-section {
+    align-self: center;
+    width: 90%;
+    height: 25%;
+    font-weight: bold;
+
+    background-color: #454849;
+    border-width: 5px;
+    border-radius: 0px;
+
+    margin-bottom: 5%;
 }
