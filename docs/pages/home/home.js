@@ -603,7 +603,6 @@ function makeGraph()
                                 monthOverflow = false
                             }
                         }
-                        console.log(new Date(tempDate))
                         break;
                     case "yearly":
                         tempDate.setFullYear(tempDate.getFullYear() + Number(incomeArray[i].recurrance[1]))
@@ -649,6 +648,7 @@ function makeGraph()
         {
             var inScope = true
             var tempDate = new Date(expenseArray[i].date)
+            var monthOverflow = false
 
             while (inScope)
             {
@@ -669,8 +669,29 @@ function makeGraph()
                         tempDate.setDate(tempDate.getDate() + Number(expenseArray[i].recurrance[1]))
                         break;
                     case "monthly":
-                        tempDate.setMonth(tempDate.getMonth() + Number(expenseArray[i].recurrance[1]))
-                        break;
+                        if (!monthOverflow)
+                            {
+                                tempMonth = tempDate.getMonth();
+                                tempDate.setDate(1)
+                                tempDate.setMonth(tempDate.getMonth() + Number(expenseArray[i].recurrance[1]))
+                                tempDate.setDate(new Date(expenseArray[i].date).getDate())
+                                if (tempMonth + 1 != tempDate.getMonth())
+                                {
+                                    monthOverflow = true
+                                }
+                            }
+                            else
+                            {
+                                tempMonth = tempDate.getMonth();
+                                tempDate.setDate(1)
+                                tempDate.setMonth(tempDate.getMonth() + Number(expenseArray[i].recurrance[1]) - 1)
+                                tempDate.setDate(new Date(expenseArray[i].date).getDate())
+                                if (tempMonth == tempDate.getMonth())
+                                {
+                                    monthOverflow = false
+                                }
+                            }
+                            break;
                     case "yearly":
                         tempDate.setFullYear(tempDate.getFullYear() + Number(expenseArray[i].recurrance[1]))
                         break;
@@ -757,6 +778,8 @@ function makeGraph()
 async function main() {
 
     await account.loadFromStorage();
+    google.charts.load('current', {'packages':['corechart']});
+    await google.charts.setOnLoadCallback(makeGraph);
 
     //Elements
     incomeUpcomingButton = document.querySelector("#upcoming-income-label");
@@ -769,8 +792,8 @@ async function main() {
     expenseUpcomingList = document.querySelector("#upcoming-expenses");
     expensePastList = document.querySelector("#past-expenses");
 
-    //loadIncome();
-    //loadExpense();
+    loadIncome();
+    loadExpense();
 
     //Hides or shows upcoming/past income/expenses
     incomeUpcomingButton.addEventListener('click', function() {
@@ -805,9 +828,6 @@ async function main() {
             expensePastList.classList.add('hidden');
         }
     })
-
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(makeGraph);
     
 }
 
