@@ -47,8 +47,10 @@ function loadIncome() {
         else {
             upcoming = true;
 
-            if (trueNextDate < today) {
+            while (trueNextDate < today) {
                 account.streams[i].date = updateDate(trueNextDate, account.streams[i].recurrance);
+                streams[i] = account.streams[i];
+                trueNextDate = streams[i].date;
             }
         }
 
@@ -122,7 +124,7 @@ function loadIncome() {
 
 }
 
-//Takes a date and recurrance and returns boolean
+//Takes a date object and recurrance array and returns boolean
 function updateDate(date, recurrance) {
     
     let nextDate = new Date(date);
@@ -181,14 +183,13 @@ function updateDate(date, recurrance) {
 
         let days = Number(recurrance[1]);
         let months = Number(recurrance[2]);
+        let dayOfWeek = recurrance[3];
 
-        //Set at start of proper months
-        nextDate.setMonth(date.getMonth() + months);
-        nextDate.setDate(1);
-
-        //Run while the nextDate's weekday is not the weekday needed
-        while (nextDate.getDay() != weekdays.get(recurrance[4])) {
-            nextDate.setDate(nextDate.getDate() + days);
+        nextDate.setDate(1) // Go to the first day of the month
+        nextDate.setMonth(nextDate.getMonth() + months)
+                        
+        while (nextDate.getDay() != weekdays.get(dayOfWeek)) {
+            nextDate.setDate(nextDate.getDate() + 1)
         }
 
         for (let i = 1; i < days; i++) {
@@ -245,8 +246,10 @@ function loadExpense() {
         else {
             upcoming = true;
 
-            if (trueNextDate < today) {
+            while (trueNextDate < today) {
                 account.expenses[i].date = updateDate(trueNextDate, account.expenses[i].recurrance);
+                expenses[i] = account.expenses[i];
+                trueNextDate = expenses[i].date;
             }
         }
 
