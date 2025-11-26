@@ -57,14 +57,13 @@ function updateDate(date, recurrance) {
 
         let days = Number(recurrance[1]);
         let months = Number(recurrance[2]);
+        let dayOfWeek = recurrance[3];
 
-        //Set at start of proper months
-        nextDate.setMonth(date.getMonth() + months);
-        nextDate.setDate(1);
-
-        //Run while the nextDate's weekday is not the weekday needed
-        while (nextDate.getDay() != weekdays.get(recurrance[4])) {
-            nextDate.setDate(nextDate.getDate() + days);
+        nextDate.setDate(1) // Go to the first day of the month
+        nextDate.setMonth(nextDate.getMonth() + months)
+                        
+        while (nextDate.getDay() != weekdays.get(dayOfWeek)) {
+            nextDate.setDate(nextDate.getDate() + 1)
         }
 
         for (let i = 1; i < days; i++) {
@@ -75,32 +74,7 @@ function updateDate(date, recurrance) {
     return nextDate;
 }
 
-lastFriday = new Date("2025/11/21");
-everyFriday = ["daily", "7"];
-
-lastMonth = new Date("2025/11/01");
-everyMonth = ["monthly", "1"];
-
-lastYear = new Date("2024/01/01");
-everyTwoYears = ["yearly", "2"];
-
-newYears2024 = new Date("2024/12/31");
-lastDayOf5Months = ["specificDay", "29", "5"];
-
-nextWednesday = new Date("2025/11/26");
-everyThirdWednesday = new Date("specificDayOfWeek", "3", "1", "Wednesday");
-
-newDate1 = updateDate(lastFriday, everyFriday);    //Expected 2025/11/28
-console.log(newDate1);
-
-newDate2 = updateDate(lastMonth, everyMonth);   //Expected 2025/12/01
-console.log(newDate2);
-
-newDate3 = updateDate(lastYear, everyTwoYears); //Expected 2026/01/01
-console.log(newDate3)
-
-newDate4 = updateDate(newYears2024, lastDayOf5Months); //Expected 2025/05/31
-console.log(newDate4);
-
-newDate5 = updateDate(nextWednesday, everyThirdWednesday);  //Expected 2025/12/17 (third wednesday of december)
-console.log(newDate5);
+date = new Date("2025-11-26T07:00:00.000Z"); 
+thisRecur = ["specificDayOfWeek", "2", "2", "Wednesday"];
+newDate = updateDate(date, thisRecur);
+console.log(newDate);

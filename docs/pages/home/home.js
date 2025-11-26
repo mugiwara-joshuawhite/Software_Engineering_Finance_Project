@@ -47,8 +47,10 @@ function loadIncome() {
         else {
             upcoming = true;
 
-            if (trueNextDate < today) {
-                account.streams[i].date = updateDate(trueNextDate, account.recurrance);
+            while (trueNextDate < today) {
+                account.streams[i].date = updateDate(trueNextDate, account.streams[i].recurrance);
+                streams[i] = account.streams[i];
+                trueNextDate = streams[i].date;
             }
         }
 
@@ -122,7 +124,7 @@ function loadIncome() {
 
 }
 
-//Takes a date and recurrance and returns boolean
+//Takes a date object and recurrance array and returns boolean
 function updateDate(date, recurrance) {
     
     let nextDate = new Date(date);
@@ -181,14 +183,13 @@ function updateDate(date, recurrance) {
 
         let days = Number(recurrance[1]);
         let months = Number(recurrance[2]);
+        let dayOfWeek = recurrance[3];
 
-        //Set at start of proper months
-        nextDate.setMonth(date.getMonth() + months);
-        nextDate.setDate(1);
-
-        //Run while the nextDate's weekday is not the weekday needed
-        while (nextDate.getDay() != weekdays.get(recurrance[4])) {
-            nextDate.setDate(nextDate.getDate() + days);
+        nextDate.setDate(1) // Go to the first day of the month
+        nextDate.setMonth(nextDate.getMonth() + months)
+                        
+        while (nextDate.getDay() != weekdays.get(dayOfWeek)) {
+            nextDate.setDate(nextDate.getDate() + 1)
         }
 
         for (let i = 1; i < days; i++) {
@@ -245,8 +246,10 @@ function loadExpense() {
         else {
             upcoming = true;
 
-            if (trueNextDate < today) {
-                account.expenses[i].date = updateDate(trueNextDate, account.recurrance);
+            while (trueNextDate < today) {
+                account.expenses[i].date = updateDate(trueNextDate, account.expenses[i].recurrance);
+                expenses[i] = account.expenses[i];
+                trueNextDate = expenses[i].date;
             }
         }
 
@@ -559,6 +562,7 @@ function makeGraph()
         {
             var inScope = true
             var tempDate = new Date(incomeArray[i].date)
+            var monthOverflow = false;
 
             while (inScope)
             {
@@ -580,7 +584,28 @@ function makeGraph()
                         tempDate.setDate(tempDate.getDate() + Number(incomeArray[i].recurrance[1]))
                         break;
                     case "monthly":
-                        tempDate.setMonth(tempDate.getMonth() + Number(incomeArray[i].recurrance[1]))
+                        if (!monthOverflow)
+                        {
+                            tempMonth = tempDate.getMonth();
+                            tempDate.setDate(1)
+                            tempDate.setMonth(tempDate.getMonth() + Number(incomeArray[i].recurrance[1]))
+                            tempDate.setDate(new Date(incomeArray[i].date).getDate())
+                            if (tempMonth + 1 != tempDate.getMonth())
+                            {
+                                monthOverflow = true
+                            }
+                        }
+                        else
+                        {
+                            tempMonth = tempDate.getMonth();
+                            tempDate.setDate(1)
+                            tempDate.setMonth(tempDate.getMonth() + Number(incomeArray[i].recurrance[1]) - 1)
+                            tempDate.setDate(new Date(incomeArray[i].date).getDate())
+                            if (tempMonth == tempDate.getMonth())
+                            {
+                                monthOverflow = false
+                            }
+                        }
                         break;
                     case "yearly":
                         tempDate.setFullYear(tempDate.getFullYear() + Number(incomeArray[i].recurrance[1]))
@@ -590,15 +615,15 @@ function makeGraph()
                         tempDate.setDate(Number(incomeArray[i].recurrance[1]))
                         break;
                     case "specificDayOfWeek":
-                        tempDate.setMonth(tempDate.getMonth() + Number(incomeArray[i].recurrance[2])) // Go to correct month to start at (last one + 1)
                         tempDate.setDate(1) // Go to the first day of the month
+                        tempDate.setMonth(tempDate.getMonth() + Number(incomeArray[i].recurrance[2])) // Go to correct month to start at (last one + 1)
                         
-                        while (tempDate.getDay() != days.get(incomeArray[i].recurrance[4])) // Add until we get to the first specified weekday of that month
+                        while (tempDate.getDay() != days.get(incomeArray[i].recurrance[3])) // Add until we get to the first specified weekday of that month
                         {
-                            tempDate.setDate(tempDate.getDate() + Number(incomeArray[i].recurrance[1]))
+                            tempDate.setDate(tempDate.getDate() + 1)
                         }
 
-                        for (let i = 1; i < incomeArray[i].recurrance[1]; i++) // Move to correct month
+                        for (let i = 1; i < Number(incomeArray[i].recurrance[1]); i++) // Move to correct week
                         {
                             tempDate.setDate(tempDate.getDate() + 7)
                         }
@@ -626,6 +651,7 @@ function makeGraph()
         {
             var inScope = true
             var tempDate = new Date(expenseArray[i].date)
+            var monthOverflow = false
 
             while (inScope)
             {
@@ -646,8 +672,29 @@ function makeGraph()
                         tempDate.setDate(tempDate.getDate() + Number(expenseArray[i].recurrance[1]))
                         break;
                     case "monthly":
-                        tempDate.setMonth(tempDate.getMonth() + Number(expenseArray[i].recurrance[1]))
-                        break;
+                        if (!monthOverflow)
+                            {
+                                tempMonth = tempDate.getMonth();
+                                tempDate.setDate(1)
+                                tempDate.setMonth(tempDate.getMonth() + Number(expenseArray[i].recurrance[1]))
+                                tempDate.setDate(new Date(expenseArray[i].date).getDate())
+                                if (tempMonth + 1 != tempDate.getMonth())
+                                {
+                                    monthOverflow = true
+                                }
+                            }
+                            else
+                            {
+                                tempMonth = tempDate.getMonth();
+                                tempDate.setDate(1)
+                                tempDate.setMonth(tempDate.getMonth() + Number(expenseArray[i].recurrance[1]) - 1)
+                                tempDate.setDate(new Date(expenseArray[i].date).getDate())
+                                if (tempMonth == tempDate.getMonth())
+                                {
+                                    monthOverflow = false
+                                }
+                            }
+                            break;
                     case "yearly":
                         tempDate.setFullYear(tempDate.getFullYear() + Number(expenseArray[i].recurrance[1]))
                         break;
@@ -656,15 +703,15 @@ function makeGraph()
                         tempDate.setDate(Number(expenseArray[i].recurrance[1]))
                         break;
                     case "specificDayOfWeek":
-                        tempDate.setMonth(tempDate.getMonth() + Number(expenseArray[i].recurrance[2])) // Go to correct month to start at (last one + 1)
                         tempDate.setDate(1) // Go to the first day of the month
+                        tempDate.setMonth(tempDate.getMonth() + Number(expenseArray[i].recurrance[2])) // Go to correct month to start at (last one + 1)
                         
-                        while (tempDate.getDay() != days.get(expenseArray[i].recurrance[4])) // Add until we get to the first specified weekday of that month
+                        while (tempDate.getDay() != days.get(expenseArray[i].recurrance[3])) // Add until we get to the first specified weekday of that month
                         {
-                            tempDate.setDate(tempDate.getDate() + Number(expenseArray[i].recurrance[1]))
+                            tempDate.setDate(tempDate.getDate() + 1)
                         }
 
-                        for (let i = 1; i < expenseArray[i].recurrance[1]; i++) // Move to correct month
+                        for (let i = 1; i < Number(expenseArray[i].recurrance[1]); i++) // Move to correct week
                         {
                             tempDate.setDate(tempDate.getDate() + 7)
                         }
@@ -735,7 +782,7 @@ async function main() {
 
     await account.loadFromStorage();
     google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(makeGraph);
+    await google.charts.setOnLoadCallback(makeGraph);
 
     //Elements
     incomeUpcomingButton = document.querySelector("#upcoming-income-label");
