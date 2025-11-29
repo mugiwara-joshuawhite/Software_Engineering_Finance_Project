@@ -35,5 +35,9 @@ li{
 
 .links{
     text-align: left;
-    color:#0000FF;
+    color:#6388ff;
+}
+
+.links:visited{
+    color:#b265ff;
 }
