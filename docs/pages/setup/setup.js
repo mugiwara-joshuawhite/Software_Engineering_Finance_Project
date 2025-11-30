@@ -52,16 +52,35 @@ function addStream() {
     payDaySelector = document.querySelector('#acc-pay-day');    //Next payday
     payRateTypeSelector = document.querySelector('#acc-pay-rate-type'); //Pay rate type
     payRateXSelector = document.querySelector('#acc-pay-rate-x');  //Pay rate amount x
+    payRateWSelector = document.querySelector('#acc-pay-rate-weekday');  //Pay rate weekday
     payRateYSelector = document.querySelector('#acc-pay-rate-y');  //Pay rate amount y
     errorText = document.querySelector('#stream-error-text');   //Error text @ bottom
 
     payName = payNameSelector.value;
     payAmount = payAmountSelector.value;
     payDay = new Date(payDaySelector.value.replace('-', '/'));
-    payRecur = [payRateTypeSelector.value, 
-                payRateXSelector.value,
-                payRateYSelector.value];
+    payRecur = [];
     payEnd = new Date("9999/12/31");
+
+    //Set up payRecur
+    if (payRateTypeSelector.value == "specificDay") {
+        payRecur = [payRateTypeSelector.value,
+            payRateXSelector.value,
+            payRateYSelector.value,
+        ];
+    }
+    else if (payRateTypeSelector.value == "specificDayOfWeek") {
+        payRecur = [payRateTypeSelector.value,
+            payRateXSelector.value,
+            payRateYSelector.value,
+            payRateWSelector.value
+        ];
+    }
+    else {
+        payRecur = [payRateTypeSelector.value,
+            payRateXSelector.value
+        ];
+    }
 
     //Add stream to account
     if (payName === "") {
@@ -99,16 +118,35 @@ function addExpense() {
     expDaySelector = document.querySelector('#acc-expense-duedate');    //Next payday
     expRateTypeSelector = document.querySelector('#acc-expense-rate-type'); //Pay rate type
     expRateXSelector = document.querySelector('#acc-expense-rate-x');  //Pay rate amount x
+    expRateWSelector = document.querySelector('#acc-expense-rate-weekday');
     expRateYSelector = document.querySelector('#acc-expense-rate-y');  //Pay rate amount y
     errorText = document.querySelector('#exp-error-text');   //Error text @ bottom
 
     expName = expNameSelector.value;
     expAmount = expAmountSelector.value;
     expDay = expDaySelector.value;
-    expRecur = [expRateTypeSelector.value, 
-                expRateXSelector.value,
-                expRateYSelector.value];
+    expRecur = [];
     expEnd = new Date("9999-12-31");
+
+    //Set up expRecur
+    if (expRateTypeSelector.value == "specificDay") {
+        expRecur = [expRateTypeSelector.value,
+            expRateXSelector.value,
+            expRateYSelector.value,
+        ];
+    }
+    else if (expRateTypeSelector.value == "specificDayOfWeek") {
+        expRecur = [expRateTypeSelector.value,
+            expRateXSelector.value,
+            expRateYSelector.value,
+            expRateWSelector.value
+        ];
+    }
+    else {
+        expRecur = [expRateTypeSelector.value,
+            expRateXSelector.value
+        ];
+    }
 
     //Add stream to account
     if (expName === "") {
@@ -135,6 +173,7 @@ function addExpense() {
     expRateTypeSelector.value = '';
     expRateXSelector.value = '';
     expRateYSelector.value = '';
+    expRateWSelector.value = '';
     showOrHideExpenseSelect();
 
 }
@@ -219,36 +258,59 @@ function showRecurranceOptionsStream() {
     payRateTypeSelector = document.querySelector('#acc-pay-rate-type'); //Pay rate type
     payRateYSelector = document.querySelector('#acc-pay-rate-y');  //Pay rate amount y
     payRateYLabel = document.querySelector('#label-acc-pay-rate-y');
+    payRateWSelector = document.querySelector('#acc-pay-rate-weekday');
+    payRateWLabel = document.querySelector('#label-acc-pay-rate-weekday');
 
     //Show Y selector if needed
     if (payRateTypeSelector.value == "specificDay" || payRateTypeSelector.value == "specificDayOfWeek") {
         payRateYSelector.classList.remove('hidden');
         payRateYLabel.classList.remove('hidden');
     }
-
     //Hide Y selector if user switches away
     else {
         payRateYSelector.classList.add('hidden');
         payRateYLabel.classList.add('hidden');
     }
 
+    //Show W selector if needed
+    if (payRateTypeSelector.value == "specificDayOfWeek") {
+        payRateWSelector.classList.remove('hidden');
+        payRateWLabel.classList.remove('hidden');
+    }
+    else {
+        payRateWSelector.classList.add('hidden');
+        payRateWLabel.classList.add('hidden');
+    }
+
 }
+
 function showRecurranceOptionsExpense() {
 
     expRateTypeSelector = document.querySelector('#acc-expense-rate-type'); //Pay rate type
     expRateYSelector = document.querySelector('#acc-expense-rate-y');  //Pay rate amount y
     expRateYLabel = document.querySelector('#label-acc-expense-rate-y');
+    expRateWSelector = document.querySelector('#acc-expense-rate-weekday');
+    expRateWLabel = document.querySelector('#label-acc-expense-rate-weekday');
 
     //Show Y selector if needed
     if (expRateTypeSelector.value == "specificDay" || expRateTypeSelector.value == "specificDayOfWeek") {
         expRateYSelector.classList.remove('hidden');
         expRateYLabel.classList.remove('hidden');
     }
-
     //Hide Y selector if user switches away
     else {
         expRateYSelector.classList.add('hidden');
         expRateYLabel.classList.add('hidden');
+    }
+
+    //Show W selector if needed
+    if (expRateTypeSelector.value == "specificDayOfWeek") {
+        expRateWSelector.classList.remove('hidden');
+        expRateWLabel.classList.remove('hidden');
+    }
+    else {
+        expRateWSelector.classList.add('hidden');
+        expRateWLabel.classList.add('hidden');
     }
 
 }

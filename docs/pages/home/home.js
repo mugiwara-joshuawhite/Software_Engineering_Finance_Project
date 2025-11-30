@@ -725,7 +725,7 @@ function makeGraph()
     let netBalance = incomeSum - expenseSum;
 
     // Constrcut Graph
-    let graphTitle = "PANIC PANIC PANIC"
+    let graphTitle = "Not enough data yet to show graph!"
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Transaction');
     data.addColumn('number', 'Amount');
@@ -734,6 +734,9 @@ function makeGraph()
     {
         data.addRow(["Unallocated Income", netBalance]);
         graphTitle = "good for now..."
+    }
+    else {
+        graphTitle = "Expenses are exceeding income!"
     }
 
     for (let i = 0; i < totalExpenses.length; i++)
