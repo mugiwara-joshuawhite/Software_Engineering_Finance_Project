@@ -139,7 +139,7 @@ async function addDistribution(index) {
 
     //Check for valid input
     if (distName.value != "") {
-        if (checkDistributionTotal(distAmount.value) < 100) {
+        if (checkDistributionTotal(distAmount.value) <= 100) {
             if (Number.isInteger(index)) {
                 account.distributions[index] = 
                     [distName.value, distAmount.value];
