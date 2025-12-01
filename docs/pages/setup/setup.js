@@ -60,6 +60,7 @@ function addStream() {
     payAmount = payAmountSelector.value;
     payDay = new Date(payDaySelector.value.replace('-', '/'));
     payRecur = [];
+    expectedPayRecurLength = 0;
     payEnd = new Date("9999/12/31");
 
     //Set up payRecur
@@ -68,6 +69,7 @@ function addStream() {
             payRateXSelector.value,
             payRateYSelector.value,
         ];
+        expectedPayRecurLength = 3;
     }
     else if (payRateTypeSelector.value == "specificDayOfWeek") {
         payRecur = [payRateTypeSelector.value,
@@ -75,11 +77,13 @@ function addStream() {
             payRateYSelector.value,
             payRateWSelector.value
         ];
+        expectedPayRecurLength = 4;
     }
     else {
         payRecur = [payRateTypeSelector.value,
             payRateXSelector.value
         ];
+        expectedPayRecurLength = 2;
     }
 
     //Add stream to account
@@ -91,7 +95,7 @@ function addStream() {
         errorText.innerText = "Set an amount for this stream!";
         errorText.classList.remove('hidden');
     }
-    else if (payRecur.length < 3) {
+    else if (payRecur.length < expectedPayRecurLength) {
         errorText.innerText = "Either the rate, or the blanks are empty!";
         errorText.classList.remove('hidden');
     }
